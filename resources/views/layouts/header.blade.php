@@ -1,11 +1,11 @@
 <header class="main-header">
     <div class="header-container">
 
-        <div class="header-logo">
-            <a href="/" class="logo-link">
-                <span class="logo-text">GAME HOBBY</span>
-            </a>
-        </div>
+<div class="header-logo">
+<a href="/" class="logo-link">
+    <img src="{{ asset('storage/logo-website-123.png') }}" alt="GAME HOBBY Logo" class="logo-img">
+</a>
+</div>
 
         <nav class="main-nav">
             <ul class="nav-list">
@@ -22,8 +22,11 @@
         <div class="header-actions">
             <a href="/services" class="action-btn text-link">Dịch vụ</a>
             <a href="/news" class="action-btn text-link">Tin tức</a>
-            <a href="/login" class="action-btn login-btn">ĐĂNG NHẬP</a>
-            <a href="/register" class="action-btn register-btn primary-bg">ĐĂNG KÝ</a>
+<a 
+    href="{{ url('login') }}" 
+    class="{{ request()->is('login') ? 'active' : '' }}">
+    Đăng nhập
+</a>            {{-- <a href="/register" class="action-btn register-btn primary-bg">ĐĂNG KÝ</a> --}}
         </div>
 
     </div>

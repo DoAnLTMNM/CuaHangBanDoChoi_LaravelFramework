@@ -1,3 +1,8 @@
+/* Import các phần CSS riêng */
+@import './header.css';
+@import './sidebar.css';
+@import './footer.css';
+@import './layout.css';
 @import 'tailwindcss';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
@@ -48,8 +53,3 @@ ul {
     padding: 0 15px;
 }
 
-/* Import các phần CSS riêng */
-@import './header.css';
-@import './sidebar.css';
-@import './footer.css';
-@import './layout.css';
