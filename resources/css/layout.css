@@ -1,0 +1,64 @@
+/* ======================================= */
+/* 2. LAYOUT CHÍNH (GRID) - ĐÃ SỬA ĐỔI */
+/* ======================================= */
+
+/* Xóa bỏ .main-layout-grid nếu bạn dùng .container > .row */
+/* .main-layout-grid {
+    display: flex;
+    margin-top: 15px;
+} */
+
+/* Giả lập Bootstrap Row (sử dụng Flexbox) */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    /* Bù trừ padding của cột con */
+    margin-left: -15px; 
+    margin-right: -15px;
+    margin-top: 15px; /* Khoảng cách từ Header xuống */
+}
+
+/* Giả lập Bootstrap Col-md-3 (Sidebar) */
+.col-md-3 {
+    /* Quan trọng: Dùng flex-basis hoặc width để xác định chiều rộng */
+    flex: 0 0 25%;
+    max-width: 25%;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Giả lập Bootstrap Col-md-9 (Content) */
+.col-md-9 {
+    /* Quan trọng: Dùng flex-basis hoặc width để xác định chiều rộng */
+    flex: 0 0 75%;
+    max-width: 75%;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* ======================================= */
+/* 3. SIDEBAR (Thanh bên) - Tối ưu hóa cho HTML */
+/* ======================================= */
+
+/* Đảm bảo .main-sidebar lấp đầy 100% không gian của .col-md-3 */
+.main-sidebar {
+    background-color: var(--light-text);
+    border: 1px solid var(--light-border);
+    width: 100%; /* Đảm bảo nó chiếm hết chiều rộng của cột */
+}
+
+/* Menu Điều hướng Chính */
+.sidebar-nav {
+    border-bottom: 1px solid var(--light-border);
+}
+
+/* Mục "Trang chủ" (Mục đang active) */
+.sidebar-nav .active {
+    background-color: var(--primary-red);
+    color: var(--light-text);
+    font-weight: bold;
+    /* Đảm bảo khối màu đỏ lấp đầy từ lề này sang lề kia của sidebar */
+    display: block; 
+}
+
+/* ... Các quy tắc CSS khác cho Sidebar (nav-item, product-item) giữ nguyên ... */

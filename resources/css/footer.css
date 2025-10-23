@@ -1,0 +1,63 @@
+/* ======================================= */
+/* 3. FOOTER */
+/* ======================================= */
+
+.main-footer {
+    background-color: var(--primary-red);
+    color: var(--light-text);
+    padding: 30px 0;
+    margin-top: 30px;
+}
+
+.footer-container {
+    max-width: 1200px; 
+    margin: 0 auto;
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.footer-col {
+    padding: 0 15px;
+    min-width: 200px;
+    margin-bottom: 20px;
+}
+
+.col-nshop-info {
+    flex: 0 0 30%; 
+    max-width: 30%;
+}
+
+.col-contact,
+.col-policies,
+.col-about {
+    flex: 0 0 23.33%; 
+    max-width: 23.33%;
+}
+
+.col-title {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.nshop-description {
+    font-size: 13px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.bct-logo {
+    width: 150px; 
+    border: 1px solid var(--light-text);
+    padding: 5px;
+    background-color: var(--light-text);
+    border-radius: 4px;
+}
+
+.policy-list a:hover,
+.about-list a:hover {
+    text-decoration: underline;
+}
