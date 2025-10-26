@@ -98,10 +98,10 @@
     color:#c4000c;
 }
 
-.navbar-nav {
+/* .navbar-nav {
     display: flex;
     flex-direction: row;
-    gap: 15px; /* Khoảng cách giữa các danh mục */
+    gap: 15px; 
     list-style: none;
     padding-left: 0;
     margin: 0;
@@ -115,4 +115,4 @@
 
 .navbar-nav .nav-link:hover {
     color: #007bff;
-}
+} */

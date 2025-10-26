@@ -7,15 +7,16 @@
 </a>
 </div>
         <nav class="main-nav">
-<ul class="navbar-nav ms-auto">
+<ul class="navbar-nav flex-row justify-content-center w-100">
     @foreach ($categories->take(9) as $category)
-        <li class="nav-item">
+        <li class="nav-item mx-3">
             <a class="nav-link" href="{{ url('/category/' . $category->slug) }}">
                 {{ $category->name }}
             </a>
         </li>
     @endforeach
-</ul>        </nav>
+</ul>       
+</nav>
 
         <div class="header-actions">
             <a href="/services" class="action-btn text-link">Dịch vụ</a>

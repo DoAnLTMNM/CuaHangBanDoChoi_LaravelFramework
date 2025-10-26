@@ -29,5 +29,6 @@ class DatabaseSeeder extends Seeder
 
         // Tạo 20 sản phẩm mẫu, mỗi sản phẩm sẽ tự gán category_id từ các category vừa tạo
         Product::factory(20)->create();
+        
     }
 }
