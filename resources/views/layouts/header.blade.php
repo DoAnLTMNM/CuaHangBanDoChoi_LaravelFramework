@@ -8,13 +8,22 @@
 </div>
 
         <nav class="main-nav">
-            <ul class="nav-list">
+<ul class="navbar-nav ms-auto d-flex flex-row">
+    @foreach ($categories as $category)
+        <li class="nav-item mx-2"> {{-- mx-2: cách đều hai bên --}}
+            <a class="nav-link text-dark" href="{{ url('/category/' . $category->slug) }}">
+                {{ $category->name }}
+            </a>
+        </li>
+    @endforeach
+</ul>
+            {{-- <ul class="nav-list">
                 <li class="nav-item">
                     <a href="/nintendo" class="nav-link">
                         <img src="icon-nintendo.svg" alt="Nintendo" class="nav-icon">
                         <span>Nintendo</span>
                     </a>
-                </li>
+                </li> --}}
               
             </ul>
         </nav>
