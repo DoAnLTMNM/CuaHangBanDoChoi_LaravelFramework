@@ -19,8 +19,15 @@
 </nav>
 
         <div class="header-actions">
+            <!-- Link giỏ hàng -->
+                    <a class="nav-link" href="{{ route('cart.index') }}">
+                        Giỏ hàng
+                        @if(session('cart'))
+                            ({{ count(session('cart')) }})
+                        @endif
+                    </a>
             <a href="/services" class="action-btn text-link">Dịch vụ</a>
-            <a href="/news" class="action-btn text-link">Tin tức</a>
+            {{-- <a href="/news" class="action-btn text-link">Tin tức</a> --}}
 <a 
     href="{{ url('login') }}" 
     class="{{ request()->is('login') ? 'active' : '' }}">
