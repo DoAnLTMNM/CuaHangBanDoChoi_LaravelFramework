@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         //
-                // Lấy tất cả danh mục đang hoạt động
+        //Lấy tất cả danh mục đang hoạt động
         $categories = Category::where('is_active', true)->get();
 
         // Chia sẻ biến $categories cho tất cả view (toàn site)
