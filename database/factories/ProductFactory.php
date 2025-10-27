@@ -26,6 +26,7 @@ class ProductFactory extends Factory
             'category_id' => Category::factory(),
             'brand' => $this->faker->company(),
             'is_active' => true,
+            'image' => $this->faker->imageUrl(640, 480, 'products', true, 'Faker'), // thêm dòng này
         ];
     }
 }

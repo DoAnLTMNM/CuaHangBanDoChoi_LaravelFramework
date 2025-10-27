@@ -24,6 +24,7 @@ return new class extends Migration
 
             $table->string('brand')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

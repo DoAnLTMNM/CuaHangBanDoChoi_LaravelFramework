@@ -24,24 +24,27 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'test@example.com',
         // ]);
 
-        // Tạo danh mục cha và con
+        // Tạo danh mục cha
         $parents = Category::factory(3)->create();
 
+        // Tạo danh mục con
         $parents->each(function ($parent) {
             Category::factory(rand(2, 4))->create([
                 'parent_id' => $parent->id
             ]);
         });
 
-        // Lấy tất cả danh mục
+        // Lấy toàn bộ danh mục
         $categories = Category::all();
 
-        // Tạo sản phẩm và gán category_id random
+        // Tạo sản phẩm và gán danh mục ngẫu nhiên
         Product::factory(20)->create()->each(function ($product) use ($categories) {
-            $product->category_id = $categories->random()->id;
-            $product->save();
+            $product->update([
+                'category_id' => $categories->random()->id,
+            ]);
         });
 
-        $this->call(ProductSeeder::class);
+        // 👉 Chỉ gọi ProductSeeder nếu cần seed thêm dữ liệu mẫu đặc biệt
+        // $this->call(ProductSeeder::class);
     }
 }

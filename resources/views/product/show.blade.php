@@ -8,7 +8,7 @@
     <div class="row">
         <!-- Ảnh sản phẩm -->
         <div class="col-md-6">
-            <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="img-fluid">
+            <<img src="{{ asset('storage/products/' . $product->image) }}" alt="{{ $product->name }}" class="img-fluid">
         </div>
 
         <!-- Thông tin sản phẩm -->

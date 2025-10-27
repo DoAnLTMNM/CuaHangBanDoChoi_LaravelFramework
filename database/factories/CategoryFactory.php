@@ -21,6 +21,8 @@ class CategoryFactory extends Factory
             'slug' => $this->faker->unique()->slug(),
             'description' => $this->faker->sentence(),
             'is_active' => true,
+            // ✅ thêm đường dẫn ảnh giả
+            'image' => 'categories/' . $this->faker->image('storage/app/public/categories', 400, 400, null, false),
         ];
     }
 }

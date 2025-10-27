@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Product;
+use App\Models\Category;
 
 class ProductSeeder extends Seeder
 {
@@ -13,7 +14,12 @@ class ProductSeeder extends Seeder
      */
     public function run(): void
     {
-          // Tạo sản phẩm
+           $faker = \Faker\Factory::create();
+
+        // Lấy 1 danh mục ngẫu nhiên để gán (nếu không có thì null)
+        $category = Category::inRandomOrder()->first();
+
+        // Tạo sản phẩm
         $product = Product::create([
             'name' => 'Bàn phím cơ GravaStar Mercury V75 Pro Neon Graffiti',
             'slug' => 'gravarstar-mercury-v75-pro-neon-graffiti',
@@ -21,10 +27,13 @@ class ProductSeeder extends Seeder
             'price' => 6890000,
             'stock' => 10,
             'brand' => 'GravaStar',
-            'is_active' => true
+            'is_active' => true,
+            'category_id' => $category?->id,
+            // dùng URL ảnh giả (không lưu file vào storage)
+            'image' => $faker->imageUrl(640, 480, 'products', true, 'Faker'),
         ]);
 
-        // Thêm items đi kèm
+        // Items đi kèm
         $items = [
             ['item_name' => 'Bàn phím cơ GravaStar Mercury V75 Pro Neon Graffiti', 'quantity' => 1],
             ['item_name' => 'Cáp USB Type-A to Type-C', 'quantity' => 1],
@@ -39,7 +48,7 @@ class ProductSeeder extends Seeder
             $product->items()->create($item);
         }
 
-        // Thêm features
+        // Features
         $features = [
             'Tần số quét 8000Hz, độ trễ 0.125ms',
             'Switch từ tính Hall Effect, Actuation Point 0.2–3.7mm',

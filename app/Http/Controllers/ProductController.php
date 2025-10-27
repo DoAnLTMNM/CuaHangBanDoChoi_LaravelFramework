@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-      // Hiển thị danh sách sản phẩm
+    // Hiển thị danh sách sản phẩm
     public function index()
     {
         $products = Product::paginate(12); // phân trang
@@ -26,11 +26,22 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
-            'image_url' => 'nullable|url',
+            'description' => 'nullable|string',
+            'stock' => 'nullable|integer',
+            'brand' => 'nullable|string|max:255',
             'is_active' => 'required|boolean',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
-        Product::create($request->all());
+        $data = $request->all();
+
+        // Xử lý upload hình ảnh
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $data['image'] = $path; // lưu đường dẫn vào DB
+        }
+
+        Product::create($data);
 
         return redirect()->route('products.index')->with('success', 'Thêm sản phẩm thành công!');
     }
@@ -55,12 +66,23 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
-            'image_url' => 'nullable|url',
+            'description' => 'nullable|string',
+            'stock' => 'nullable|integer',
+            'brand' => 'nullable|string|max:255',
             'is_active' => 'required|boolean',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $product = Product::findOrFail($id);
-        $product->update($request->all());
+        $data = $request->all();
+
+        // Xử lý upload hình ảnh mới (nếu có)
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('products', 'public');
+            $data['image'] = $path;
+        }
+
+        $product->update($data);
 
         return redirect()->route('products.index')->with('success', 'Cập nhật sản phẩm thành công!');
     }
