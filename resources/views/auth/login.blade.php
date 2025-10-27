@@ -1,4 +1,4 @@
-@extends('layouts.auth')
+@extends('layouts.app2')
 
 @section('title', 'Đăng nhập hoặc Đăng ký')
 

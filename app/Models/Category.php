@@ -12,4 +12,14 @@ class Category extends Model
     {
         return $this->hasMany(Product::class);
     }
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id');
+    }
+
+    // Danh mục con -> danh mục cha
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id');
+    }
 }

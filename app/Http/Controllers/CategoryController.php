@@ -13,16 +13,16 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        // Lấy tất cả danh mục cùng sản phẩm liên quan
-        $categories = Category::with('products')->get();
+        $categories = Category::whereNull('parent_id')
+            ->with(['children', 'products'])
+            ->get();
 
-        // Trả về view Blade
         return view('categories.index', compact('categories'));
     }
     // Hiển thị chi tiết một danh mục.
-    public function show($id)
+    public function show($slug)
     {
-        $category = Category::with('products')->findOrFail($id);
+        $category = Category::with('products')->where('slug', $slug)->firstOrFail();
 
         return view('categories.show', compact('category'));
     }
@@ -52,7 +52,7 @@ class CategoryController extends Controller
         Category::create($validated);
 
         return redirect()->route('categories.index')
-                         ->with('success', 'Thêm danh mục thành công!');
+            ->with('success', 'Thêm danh mục thành công!');
     }
     // Hiển thị form chỉnh sửa danh mục.
     public function edit($id)
@@ -85,7 +85,7 @@ class CategoryController extends Controller
         $category->update($validated);
 
         return redirect()->route('categories.index')
-                         ->with('success', 'Cập nhật danh mục thành công!');
+            ->with('success', 'Cập nhật danh mục thành công!');
     }
     // Xóa danh mục.
     public function destroy($id)
@@ -94,6 +94,6 @@ class CategoryController extends Controller
         $category->delete();
 
         return redirect()->route('categories.index')
-                         ->with('success', 'Xóa danh mục thành công!');
+            ->with('success', 'Xóa danh mục thành công!');
     }
 }
