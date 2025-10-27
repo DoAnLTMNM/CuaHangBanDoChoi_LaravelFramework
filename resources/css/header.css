@@ -4,6 +4,7 @@
 
 .main-header {
     border-bottom: 1px solid var(--light-border);
+    overflow: visible;
 }
 
 .header-container {
@@ -44,6 +45,7 @@
 /* Navigation */
 .main-nav {
     flex-grow: 1;
+     overflow: visible;
 }
 
 .nav-list {
@@ -116,3 +118,33 @@
 .navbar-nav .nav-link:hover {
     color: #007bff;
 } */
+
+/* HOVER CHO DANH MỤC */
+/* Khi hover vào li.dropdown, menu con hiển thị */
+.nav-item.dropdown:hover > .dropdown-menu {
+    display: block;
+}
+
+/* Đảm bảo menu không bị cắt và nằm trên các phần tử khác */
+.nav-item.dropdown .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1000;
+}
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+}
+.nav-item {
+    position: relative;
+}
+
+.dropdown-menu {
+    z-index: 1000;
+}
+.dropdown-toggle::after {
+    display: none !important;
+}
+

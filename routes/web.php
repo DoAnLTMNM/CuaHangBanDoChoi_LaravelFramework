@@ -18,11 +18,13 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 //CategoryController
 Route::resource('categories', CategoryController::class);
+Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 //Banners
 Route::resource('banners', BannerController::class);
 //Product
 Route::resource('products', ProductController::class);
 Route::get('/products/{id}', [ProductController::class, 'show'])->name('product.show');
+
 
 //cartController
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
