@@ -87,4 +87,48 @@ ul {
     padding: 15px;
 }
 
+/* // CSS HOME_INDEX_SPNOIBAT ////////////////////////// // */
+
+.card-product {
+    border: none;
+    transition: transform 0.2s;
+}
+
+.card-product:hover {
+    transform: translateY(-5px);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 10px;
+    text-align: center;
+}
+
+.card-title {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-text {
+    font-size: 0.9rem;
+    color: #28a745;
+    margin-bottom: 5px;
+}
+
+.out-of-stock {
+    display: block;
+    background-color: #dc3545;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    text-align: center;
+}
 
