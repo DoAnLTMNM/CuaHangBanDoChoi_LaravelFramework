@@ -51,12 +51,25 @@ class CartController extends Controller
     }
 
     // Cập nhật số lượng
-    public function update(Request $request, Cart $cart)
+    public function update(Request $request, $cartId)
     {
-        $quantity = $request->input('quantity', 1);
-        $cart->quantity = $quantity;
-        $cart->save();
+        $cartItem = Cart::findOrFail($cartId);
+        $cartItem->quantity = $request->quantity;
+        $cartItem->save();
 
-        return redirect()->back()->with('success', 'Cập nhật số lượng thành công!');
+        // Thành tiền cho sản phẩm đó
+        $newSubtotal = $cartItem->product->price * $cartItem->quantity;
+
+        // Tổng tiền toàn bộ giỏ hàng
+        $total = Cart::with('product')
+            ->get()
+            ->sum(fn($item) => $item->product->price * $item->quantity);
+
+        return response()->json([
+            'success' => true,
+            'newSubtotal' => $newSubtotal,
+            'total' => $total
+        ]);
     }
+    
 }
