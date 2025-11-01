@@ -17,7 +17,7 @@
         <div class="row">
 
             {{-- Nội dung chính --}}
-            <div class="col-md-9">
+            <div class="content-layout">
                 @yield('content')
             </div>
         </div>

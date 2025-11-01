@@ -17,11 +17,13 @@
             sản phẩm trong giỏ hàng
         </div>
 
+        <div class="row">
         <!-- Danh sách sản phẩm -->
-        <div class="cart-items-list">
+        <div class="cart-items-list col-md-7">
             @foreach($cartItems as $item)
-            <div class="cart-item border rounded p-3 mb-3 d-flex align-items-center">
-                <!-- Hình ảnh -->
+            <div class="cart-item border rounded p-3 mb-3">
+                <div class="d-flex align-items-center">
+                     <!-- Hình ảnh -->
                 <div class="me-3">
                     @if($item->product->image_url)
                         <img src="{{ $item->product->image_url }}" 
@@ -50,11 +52,7 @@
                         {{ number_format($item->product->price, 2, ',', '.') }}₫
                     </div>
 
-                    <!-- Thành tiền -->
-                    <div class="d-flex justify-content-between fw-semibold subtotal mt-1" id="subtotal-{{ $item->id }}">
-                        <div>Thành tiền:</div>
-                        <div>{{ number_format($item->product->price * $item->quantity, 2, ',', '.') }}₫</div>
-                    </div>
+                   
                 </div>
 
                 <!-- Xóa -->
@@ -68,32 +66,40 @@
                         </button>
                     </form>
                 </div>
+                </div>
+                    <!-- Thành tiền -->
+                    <div class="d-flex justify-content-between fw-semibold subtotal mt-1" id="subtotal-{{ $item->id }}">
+                        <div>Thành tiền:</div>
+                        <div>{{ number_format($item->product->price * $item->quantity, 2, ',', '.') }}₫</div>
+                    </div>
+               
             </div>
+
             @endforeach
         </div>
 
         {{-- Tổng tiền của giỏ hàng --}}
-        <div class="row justify-content-end mt-4">
-            <div class="col-md-5">
-                <div class="cart-total-box p-4 border rounded bg-white shadow-sm">
-                    <h5 class="mb-3 fw-bold">Thông tin đơn hàng</h5>
-                    
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Tổng tiền:</span>
-                        <span class="text-danger fw-bold fs-5" id="cart-total">
-                            {{ number_format($cartItems->sum(fn($i) => $i->product->price * $i->quantity), 0, ',', '.') }}₫
-                        </span>
-                    </div>
-
-                    <p class="text-muted small mb-3">
-                        Bạn có thể nhập mã giảm giá ở trang thanh toán
-                    </p>
-
-                    <a href="" class="btn btn-danger w-100 py-3 fw-bold text-uppercase">
-                        Thanh toán
-                    </a>
-                </div>
+<div class="col-md-5">
+        <div class="cart-total-box p-4 border rounded bg-white shadow-sm">
+            <h5 class="mb-3 fw-bold">Thông tin đơn hàng</h5>
+            
+            <div class="d-flex justify-content-between mb-2">
+                <span>Tổng tiền:</span>
+                <span class="text-danger fw-bold fs-5" id="cart-total">
+                    {{ number_format($cartItems->sum(fn($i) => $i->product->price * $i->quantity), 0, ',', '.') }}₫
+                </span>
             </div>
+
+            <p class="text-muted small mb-3">
+                Bạn có thể nhập mã giảm giá ở trang thanh toán
+            </p>
+
+            <a href="#" class="btn btn-danger w-100 py-3 fw-bold text-uppercase">
+                Thanh toán
+            </a>
+        </div>
+    </div>
+
         </div>
 
         <a href="{{ route('products.index') }}" class="btn btn-secondary mt-3">Tiếp tục mua hàng</a>
