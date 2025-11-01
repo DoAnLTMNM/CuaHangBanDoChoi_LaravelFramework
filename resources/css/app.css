@@ -37,7 +37,13 @@ body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
     color: var(--dark-text);
-    background-color: var(--light-text);
+}
+
+/* with chung cho toan bo layout */
+.layout-app123
+{
+    max-width: 1440px;
+    margin: 0 auto;
 }
 
 a {
@@ -49,11 +55,6 @@ ul {
     list-style: none;
 }
 
-.container {
-    max-width: 1440px;
-    margin: 0 auto;
-    padding: 0 15px;
-}
 
 
 /*  CSS BANNERS ////////////////////////// */
@@ -133,4 +134,16 @@ ul {
     font-size: 0.8rem;
     text-align: center;
 }
+
+
+/* CSS GIỎ HÀNG */
+.number-products
+{
+    background-color: #e9eef0;
+}
+.cart-item
+{
+    border-color: rgb(255, 247, 247);
+}
+
 

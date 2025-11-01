@@ -1,16 +1,16 @@
 <header class="main-header">
     <div class="header-container">
 
-<div class="header-logo">
+<div class="header-logo col-md-3">
 <a href="/" class="logo-link">
     <img src="{{ asset('storage/logo-website-123.png') }}" alt="GAME HOBBY Logo" class="logo-img">
 </a>
 </div>
-        <nav class="main-nav">
-            <ul class="navbar-nav flex-row justify-content-center w-100">
+        <nav class="main-nav col-md-9 d-flex">
+            <ul class="navbar-nav flex-row w-100">
     @foreach ($categories->take(9) as $category)
         @if($category->children->count())
-            <li class="nav-item dropdown mx-3 text-center">
+            <li class="nav-item dropdown me-3 text-center">
                 <a class="nav-link dropdown-toggle d-flex flex-column align-items-center" 
                    href="{{ url('/category/' . $category->slug) }}"
                    id="navbarDropdown{{ $category->id }}" role="button" data-bs-toggle="dropdown"
@@ -34,7 +34,7 @@
                 </ul>
             </li>
         @else
-            <li class="nav-item mx-3 text-center">
+            <li class="nav-item me-3 text-center">
                 <a class="nav-link d-flex flex-column align-items-center" 
                    href="{{ url('/category/' . $category->slug) }}">
                     @if ($category->image)
@@ -49,8 +49,6 @@
         @endif
     @endforeach
 </ul>
-</nav>
-
         <div class="header-actions">
             <!-- Link giỏ hàng -->
                     <a class="nav-link" href="{{ route('cart.index') }}">
@@ -67,6 +65,9 @@
     Đăng nhập
 </a>            {{-- <a href="/register" class="action-btn register-btn primary-bg">ĐĂNG KÝ</a> --}}
         </div>
+</nav>
+
+
 
     </div>
 </header>

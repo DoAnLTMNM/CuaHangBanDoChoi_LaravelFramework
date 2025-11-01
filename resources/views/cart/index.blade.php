@@ -11,17 +11,16 @@
     @endif
 
     @if($cartItems->count() > 0)
+        <div class="row">
+        <!-- Danh sách sản phẩm -->
+        <div class="cart-items-list col-md-8">
         <!-- Thông báo số lượng sản phẩm -->
-        <div class="alert alert-light border mb-4 text-center">
+        <div class="p-3 number-products">
             Bạn đang có <strong>{{ $cartItems->count() }}</strong> 
             sản phẩm trong giỏ hàng
         </div>
-
-        <div class="row">
-        <!-- Danh sách sản phẩm -->
-        <div class="cart-items-list col-md-7">
             @foreach($cartItems as $item)
-            <div class="cart-item border rounded p-3 mb-3">
+            <div class="cart-item border-bottom mb-3">
                 <div class="d-flex align-items-center">
                      <!-- Hình ảnh -->
                 <div class="me-3">
@@ -79,7 +78,7 @@
         </div>
 
         {{-- Tổng tiền của giỏ hàng --}}
-<div class="col-md-5">
+<div class="col-md-4">
         <div class="cart-total-box p-4 border rounded bg-white shadow-sm">
             <h5 class="mb-3 fw-bold">Thông tin đơn hàng</h5>
             
@@ -94,7 +93,7 @@
                 Bạn có thể nhập mã giảm giá ở trang thanh toán
             </p>
 
-            <a href="#" class="btn btn-danger w-100 py-3 fw-bold text-uppercase">
+            <a href="#" class="btn btn-danger w-100 py-2 fw-bold text-uppercase">
                 Thanh toán
             </a>
         </div>

@@ -9,24 +9,24 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
-<body>
+<body class="bg-light">
+    <div class="layout-app123">
+
  {{-- Header --}}
     @include('layouts.header')
 
-    <div class="container">
+<div class="layout-app123"> {{-- dùng cùng class như header --}}
         <div class="row">
-            {{-- Sidebar --}}
             <div class="col-md-3">
                 @include('layouts.sidebar')
             </div>
 
-            {{-- Nội dung chính --}}
             <div class="col-md-9">
                 @yield('content')
             </div>
         </div>
     </div>
-
+    </div>
     {{-- Footer --}}
     @include('layouts.footer')
 
