@@ -73,10 +73,10 @@
        class="{{ request()->is('login') ? 'active' : '' }}">
        Đăng nhập
     </a>
-    <a href="{{ route('register') }}" 
+    {{-- <a href="{{ route('register') }}" 
        class="{{ request()->is('register') ? 'active' : '' }}">
        Đăng ký
-    </a>
+    </a> --}}
 @endif
         </div>
 </nav>
