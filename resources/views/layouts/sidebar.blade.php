@@ -9,10 +9,10 @@
             <i class="fas fa-box"></i> <span>Hàng Mới Về</span>
         </a>
     </nav>
-    
+
     <div class="featured-products-section">
         <h3 class="section-title">Sản phẩm nổi bật</h3>
-        
+
         <div class="featured-products-grid">
             <a href="/product/hololive-card-game" class="product-card">
                 <div class="product-image-container">
