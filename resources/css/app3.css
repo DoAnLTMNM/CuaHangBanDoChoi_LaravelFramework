@@ -1,0 +1,147 @@
+/* Import các phần CSS riêng */
+@import './header.css';
+@import './sidebar.css';
+@import './footer.css';
+@import './layout.css';
+@import 'tailwindcss';
+@import './chitietsp.css';
+@import './auth.css';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+/* Fonts & biến màu */
+:root {
+    --primary-red: #e60012;
+    --gray-bg: #f5f5f5;
+    --light-border: #eee;
+    --dark-text: #333;
+    --light-text: #fff;
+}
+
+/* Reset */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--dark-text);
+}
+
+/* with chung cho toan bo layout */
+.layout-app123
+{
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul {
+    list-style: none;
+}
+
+
+
+/*  CSS BANNERS ////////////////////////// */
+
+#bannerCarousel {
+    border-radius: 15px;
+    overflow: hidden;
+    margin: 20px auto;
+    max-width: 1200px; /* hoặc 100% nếu bạn muốn full chiều ngang */
+}
+
+.banner-img {
+    object-fit: cover;
+    height: 400px; /* hoặc auto nếu muốn theo tỉ lệ */
+    border-radius: 15px;
+}
+
+/* Tạo khoảng trống giữa hai slide */
+.carousel-inner {
+    display: flex;
+    align-items: center;
+}
+
+.carousel-item {
+    transition: transform 0.8s ease-in-out; /* mượt hơn */
+}
+
+/* Nút điều hướng đẹp hơn */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    background-color: rgba(0,0,0,0.5);
+    border-radius: 50%;
+    padding: 15px;
+}
+
+/* // CSS HOME_INDEX_SPNOIBAT ////////////////////////// // */
+
+.card-product {
+    border: none;
+    transition: transform 0.2s;
+}
+
+.card-product:hover {
+    transform: translateY(-5px);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 10px;
+    text-align: center;
+}
+
+.card-title {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-text {
+    font-size: 0.9rem;
+    color: #28a745;
+    margin-bottom: 5px;
+}
+
+.out-of-stock {
+    display: block;
+    background-color: #dc3545;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+
+/* CSS GIỎ HÀNG */
+.number-products
+{
+    background-color: #e9eef0;
+}
+.cart-item
+{
+    border-color: rgb(255, 247, 247);
+}

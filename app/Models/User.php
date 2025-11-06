@@ -45,4 +45,22 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+     // Quan hệ với roles
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class); // pivot table role_user
+    }
+
+    // Kiểm tra role
+    public function hasRole($roleName)
+    {
+        return $this->roles->contains('name', $roleName);
+    }
+
+    // Quan hệ với Employee (nếu bạn tạo bảng employees)
+    public function employee()
+    {
+        return $this->hasOne(Employee::class);
+    }
 }

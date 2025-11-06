@@ -12,7 +12,7 @@
         @forelse ($products as $product)
             <div class="col-md-3 mb-4">
                 {{-- Toàn bộ card là 1 link --}}
-                <a href="{{ route('product.show', $product->id) }}" class="card-product h-100 text-decoration-none text-dark">
+                <a href="{{ route('products.show', $product->id) }}" class="card-product h-100 text-decoration-none text-dark">
                     <div class="card h-100">
                         <img src="{{ asset('storage/products/' . $product->image) }}" class="card-img-top" alt="{{ $product->name }}">
                         <div class="card-body">

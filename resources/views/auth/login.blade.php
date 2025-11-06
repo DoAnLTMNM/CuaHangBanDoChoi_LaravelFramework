@@ -1,81 +1,48 @@
 @extends('layouts.app2')
 
-@section('title', 'Đăng nhập hoặc Đăng ký')
-
 @section('content')
-<div class="auth-page-wrapper">
-    <div class="auth-card">
+<div class="container mt-5 w-50">
+    <h3 class="text-center">Đăng nhập</h3>
+    <form method="POST" action="{{ route('login') }}">
+        @csrf
 
-        {{-- Tabs --}}
-        <div class="auth-tabs">
-            <button class="tab-item active" id="login-tab">Đăng nhập</button>
-            <button class="tab-item" id="register-tab">Đăng ký</button>
+        <!-- Email Address -->
+        <div>
+            <label for="email">Email</label>
+            <input id="email" class="form-control mt-1" type="email" name="email"
+                value="{{ old('email') }}" required autofocus autocomplete="username">
+            @error('email')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
 
-        {{-- Form đăng nhập --}}
-        <div class="auth-form" id="login-form">
-            <form>
-                <label for="login_phone">Số điện thoại</label>
-                <input type="text" id="login_phone" name="phone" placeholder="Nhập số điện thoại" required>
-
-                <label for="login_password">Mật khẩu</label>
-                <div class="password-input-wrapper">
-                    <input type="password" id="login_password" name="password" placeholder="Nhập mật khẩu" required>
-                    <span class="password-toggle"><i class="far fa-eye-slash"></i></span>
-                </div>
-                
-                <a href="#" class="forgot-password-link">Quên mật khẩu?</a>
-
-                {{-- @include('auth.benefits') --}}
-
-                <button type="submit" class="auth-btn submit-btn primary-bg">Đăng Nhập</button>
-            </form>
+        <!-- Password -->
+        <div class="mt-4">
+            <label for="password">Password</label>
+            <input id="password" class="form-control mt-1" type="password" name="password" required autocomplete="current-password">
+            @error('password')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
-        
-        {{-- Form đăng ký --}}
-        <div class="auth-form hidden" id="register-form">
-            <form>
-                <label for="reg_phone">Số điện thoại</label>
-                <input type="text" id="reg_phone" name="phone" placeholder="Nhập số điện thoại" required>
 
-                {{-- @include('auth.benefits') --}}
+        <!-- Remember Me -->
+        <div class="form-check mt-3">
+            <input id="remember_me" type="checkbox" class="form-check-input" name="remember">
+            <label for="remember_me" class="form-check-label">Remember me</label>
+        </div>
 
-                <button type="submit" class="auth-btn submit-btn primary-bg">Gửi mã xác nhận</button>
-            </form>
+        <div class="mt-4 d-flex justify-content-between align-items-center">
+            @if (Route::has('password.request'))
+                <a class="text-decoration-none small text-muted" href="{{ route('password.request') }}">
+                    Forgot your password?
+                </a>
+            @endif
+
         </div>
         
-        <div class="social-login-separator">Hoặc</div>
-
-        <button class="auth-btn social-btn google-btn">
-            <i class="fab fa-google"></i> Tiếp tục với Google
-        </button>
-
-        <button class="auth-btn social-btn facebook-btn">
-            <i class="fab fa-facebook-f"></i> Tiếp tục với Facebook
-        </button>
-
-    </div>
+            <button type="submit" class="btn btn-primary w-100">
+                Log in
+            </button>
+    </form>
 </div>
-
-{{-- Script chuyển tab --}}
-<script>
-    const loginTab = document.getElementById('login-tab');
-    const registerTab = document.getElementById('register-tab');
-    const loginForm = document.getElementById('login-form');
-    const registerForm = document.getElementById('register-form');
-
-    loginTab.onclick = () => {
-        loginTab.classList.add('active');
-        registerTab.classList.remove('active');
-        loginForm.classList.remove('hidden');
-        registerForm.classList.add('hidden');
-    };
-
-    registerTab.onclick = () => {
-        registerTab.classList.add('active');
-        loginTab.classList.remove('active');
-        registerForm.classList.remove('hidden');
-        loginForm.classList.add('hidden');
-    };
-</script>
 @endsection

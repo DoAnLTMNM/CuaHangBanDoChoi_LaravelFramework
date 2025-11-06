@@ -59,11 +59,25 @@
                     </a>
             <a href="/services" class="action-btn text-link">Dịch vụ</a>
             {{-- <a href="/news" class="action-btn text-link">Tin tức</a> --}}
-<a 
-    href="{{ url('login') }}" 
-    class="{{ request()->is('login') ? 'active' : '' }}">
-    Đăng nhập
-</a>            {{-- <a href="/register" class="action-btn register-btn primary-bg">ĐĂNG KÝ</a> --}}
+@if(Auth::check())
+    <span>Xin chào, {{ Auth::user()->name }}</span>
+    <a href="{{ route('logout') }}"
+       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        Đăng xuất
+    </a>
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        @csrf
+    </form>
+@else
+    <a href="{{ route('login') }}" 
+       class="{{ request()->is('login') ? 'active' : '' }}">
+       Đăng nhập
+    </a>
+    <a href="{{ route('register') }}" 
+       class="{{ request()->is('register') ? 'active' : '' }}">
+       Đăng ký
+    </a>
+@endif
         </div>
 </nav>
 
