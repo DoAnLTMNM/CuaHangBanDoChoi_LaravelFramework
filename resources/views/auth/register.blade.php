@@ -3,7 +3,7 @@
 @section('content')
 <div class="d-flex justify-content-center align-items-center">
     <div class="w-50 mt-5" style="max-width: 600px;">
-        <h3 class="text-center">Đăng ký tài khoản</h3>
+        <h3 class="text-center">Đăng ký</h3>
 
         <form method="POST" action="{{ route('register') }}">
             @csrf
