@@ -21,8 +21,6 @@ class AuthenticatedSessionController extends Controller
 
     /**
      * Handle an incoming authentication request.
-     *
-     * @param \App\Http\Requests\Auth\LoginRequest|\Illuminate\Http\Request $request
      */
     public function store(LoginRequest $request): RedirectResponse
     {
