@@ -57,31 +57,58 @@
                 <a href="/services" class="action-btn text-link">Dịch vụ</a>
                 {{-- <a href="/news" class="action-btn text-link">Tin tức</a> --}}
                 @if (Auth::check())
-                    <!-- LINK PROFILE - ĐÃ SỬA -->
-                    <a href="{{ route('profile.edit') }}" class="text-decoration-none text-dark fw-medium">
-                        Xin chào, {{ Auth::user()->first_name ?? Auth::user()->name }}
-                    </a>
+                    <ul class="navbar-nav">
+                        <li class="nav-item dropdown click-dropdown">
+                            <a class="nav-link dropdown-toggle fw-medium text-dark" href="#" id="userDropdown"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ Auth::user()->first_name ?? Auth::user()->name }}
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Thông tin tài khoản</a>
+                                </li>
+                                <li><a class="dropdown-item" href="#">Cài đặt</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-danger" href="#"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        Đăng xuất
+                                    </a>
+                                </li>
+                            </ul>
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                @csrf
+                            </form>
+                        </li>
 
-                    <!-- Đăng xuất -->
-                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
-                        @csrf
-                        <a href="#" onclick="event.preventDefault(); this.closest('form').submit();"
-                            class="text-danger text-decoration-none">
-                            Đăng xuất
-                        </a>
-                    </form>
+                    </ul>
                 @else
                     <a href="{{ route('login') }}" class="{{ request()->is('login') ? 'active' : '' }}">
                         Đăng nhập
                     </a>
-                    {{-- <a href="{{ route('register') }}" 
-       class="{{ request()->is('register') ? 'active' : '' }}">
-       Đăng ký
-    </a> --}}
                 @endif
             </div>
         </nav>
     </div>
+    <script>
+    document.querySelectorAll('.click-dropdown .dropdown-toggle').forEach(drop => {
+        drop.addEventListener('click', function(e) {
+            e.preventDefault();
+            let menu = this.nextElementSibling;
+            menu.classList.toggle('show');
+        });
+    });
+
+    // Đóng dropdown khi click ra ngoài
+    document.addEventListener('click', function(e) {
+        document.querySelectorAll('.click-dropdown .dropdown-menu.show').forEach(menu => {
+            if (!menu.parentElement.contains(e.target)) {
+                menu.classList.remove('show');
+            }
+        });
+    });
+</script>
 </header>
 
 

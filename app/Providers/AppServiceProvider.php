@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Category;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,5 +28,7 @@ class AppServiceProvider extends ServiceProvider
 
         // Chia sẻ biến $categories cho tất cả view (toàn site)
         View::share('categories', $categories);
+        // phân trang 
+        Paginator::useBootstrapFive();
     }
 }

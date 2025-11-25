@@ -11,7 +11,7 @@
         <p>Đây là trang dashboard admin.</p>
 
         <ul>
-            <li><a href="{{ route('admin.products.create') }}">Thêm sản phẩm</a></li>
+            <li><a href="{{ route('admin.products.index') }}">Thêm sản phẩm</a></li>
             <li><a href="{{ route('admin.logout') }}" 
                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                    Đăng xuất
