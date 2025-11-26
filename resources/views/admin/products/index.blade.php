@@ -80,12 +80,16 @@
                     <tr>
                         <td>{{ $product->id }}</td>
                         <td>
-                            @if ($product->image)
-                                <img src="{{ asset('storage/' . $product->image) }}" width="60">
+                            @if ($product->images->count() > 0)
+                                @foreach ($product->images as $img)
+                                    <img src="{{ asset('storage/' . $img->image) }}" width="60" height="60"
+                                        class="me-1 rounded" style="object-fit:cover;">
+                                @endforeach
                             @else
                                 <span class="text-muted">Không ảnh</span>
                             @endif
                         </td>
+
                         <td>{{ $product->name }}</td>
                         <td>{{ $product->category ? $product->category->name : 'Không' }}</td>
                         <td>{{ number_format($product->price, 0, '.', ',') }}</td>
@@ -98,7 +102,8 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-sm btn-warning">Sửa</a>
+                            <a href="{{ route('admin.products.edit', $product->id) }}"
+                                class="btn btn-sm btn-warning">Sửa</a>
                             <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
                                 data-bs-target="#deleteProductModal{{ $product->id }}">Xóa</button>
                         </td>

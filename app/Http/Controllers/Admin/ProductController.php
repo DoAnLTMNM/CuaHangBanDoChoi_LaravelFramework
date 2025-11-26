@@ -16,7 +16,8 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Product::with('category')->orderByDesc('id');
+        // Thêm 'images' vào with
+        $query = Product::with(['category', 'images'])->orderByDesc('id');
 
         // Tìm kiếm tên
         if ($request->filled('keyword')) {
@@ -44,6 +45,7 @@ class ProductController extends Controller
         return view('admin.products.index', compact('products', 'categories'));
     }
 
+
     public function create()
     {
         $categories = Category::where('is_active', 1)->get();
@@ -57,22 +59,22 @@ class ProductController extends Controller
     {
         $data = $request->all();
 
-        // Xử lý trạng thái hiển thị
         $data['is_active'] = $request->has('is_active') && $request->is_active == 1 ? 1 : 0;
+
+        // Tạo sản phẩm
+        $product = Product::create($data);
 
         // Xử lý nhiều ảnh
         if ($request->hasFile('images')) {
-            $imagePaths = [];
             foreach ($request->file('images') as $image) {
-                $imagePaths[] = $image->store('products', 'public'); // lưu vào storage/app/public/products
+                $path = $image->store('products', 'public');
+                $product->images()->create(['image' => $path]);
             }
-            $data['images'] = json_encode($imagePaths);
         }
-
-        Product::create($data);
 
         return redirect()->route('admin.products.index')->with('success', 'Thêm sản phẩm thành công!');
     }
+
     // Hiển thị form sửa
     public function edit(Product $product)
     {
@@ -85,34 +87,46 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
+        // Cập nhật các trường cơ bản
         $data = $request->all();
-
-        // Xử lý trạng thái hiển thị
         $data['is_active'] = $request->has('is_active') && $request->is_active == 1 ? 1 : 0;
-
-        // Xử lý nhiều ảnh
-        if ($request->hasFile('images')) {
-            // Xóa ảnh cũ
-            if ($product->images) {
-                foreach (json_decode($product->images) as $oldImage) {
-                    if (Storage::disk('public')->exists($oldImage)) {
-                        Storage::disk('public')->delete($oldImage);
-                    }
-                }
-            }
-
-            // Lưu ảnh mới
-            $imagePaths = [];
-            foreach ($request->file('images') as $image) {
-                $imagePaths[] = $image->store('products', 'public');
-            }
-            $data['images'] = json_encode($imagePaths);
-        }
 
         $product->update($data);
 
+        // ----------------------------
+        // XỬ LÝ ẢNH CŨ
+        // ----------------------------
+        // Lấy danh sách ảnh cũ còn lại từ input hidden
+        $existingImages = $request->input('existing_images', []); // nếu bỏ dấu x, sẽ trả về mảng rỗng
+
+        // Duyệt các ảnh cũ trong DB
+        foreach ($product->images as $oldImage) {
+            // Nếu ảnh không còn trong mảng existingImages => xóa
+            if (!in_array($oldImage->image, $existingImages)) {
+                // Xóa file trong storage
+                if (Storage::disk('public')->exists($oldImage->image)) {
+                    Storage::disk('public')->delete($oldImage->image);
+                }
+                // Xóa bản ghi DB
+                $oldImage->delete();
+            }
+        }
+
+        // ----------------------------
+        // XỬ LÝ ẢNH MỚI
+        // ----------------------------
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $path = $image->store('products', 'public');
+                $product->images()->create(['image' => $path]);
+            }
+        }
+
         return redirect()->route('admin.products.index')->with('success', 'Cập nhật sản phẩm thành công!');
     }
+
+
+
 
 
     /**
