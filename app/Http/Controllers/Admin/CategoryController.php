@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -12,37 +13,45 @@ class CategoryController extends Controller
     /**
      * Hiển thị danh sách tất cả danh mục.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::whereNull('parent_id')
-            ->with(['children', 'products'])
-            ->get();
+        $query = Category::with('parent')->orderByDesc('id');
 
-        return view('categories.index', compact('categories'));
+        // Tìm kiếm theo tên
+        if ($request->filled('keyword')) {
+            $query->where('name', 'LIKE', '%' . $request->keyword . '%');
+        }
+
+        // Lọc theo trạng thái
+        if ($request->filled('status') && in_array($request->status, ['0', '1'])) {
+            $query->where('is_active', $request->status);
+        }
+
+        // Lọc theo danh mục cha
+        if ($request->filled('parent_id')) {
+            $query->where('parent_id', $request->parent_id);
+        }
+
+        // Lọc theo khoảng ngày tạo
+        if ($request->filled('created_date')) {
+            $query->whereDate('created_at', $request->created_date);
+        }
+
+
+        $categories = $query->paginate(10)->appends($request->query());
+
+        // Xem chi tiết category từ popup
+        $viewCategory = null;
+        if ($request->has('view_id')) {
+            $viewCategory = Category::with('products')->find($request->view_id);
+        }
+
+        // Lấy danh sách category cha để hiển thị combobox
+        $allCategories = Category::with('children')->orderBy('name')->get();
+        return view('admin.categories.index', compact('categories', 'viewCategory', 'allCategories'));
     }
 
-    /**
-     * Hiển thị chi tiết một danh mục.
-     */
-    public function show($slug)
-    {
-        $category = Category::with('products.images', 'products.discount')
-            ->where('slug', $slug)
-            ->firstOrFail();
 
-        $products = $category->products;
-
-        return view('categories.show', compact('category', 'products'));
-    }
-
-    /**
-     * Hiển thị form thêm danh mục.
-     */
-    public function create()
-    {
-        $categories = Category::all();
-        return view('categories.create', compact('categories'));
-    }
 
     /**
      * Xử lý thêm mới danh mục.
@@ -62,30 +71,22 @@ class CategoryController extends Controller
             $validated['slug'] = Str::slug($validated['name']);
         }
 
-        // ✅ Xử lý upload ảnh nếu có
+        // ⭐ SET TRẠNG THÁI
+        $validated['is_active'] = $request->has('is_active') ? 1 : 0;
+
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('categories', 'public');
         }
 
         Category::create($validated);
 
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Thêm danh mục thành công!');
     }
 
-    /**
-     * Hiển thị form chỉnh sửa danh mục.
-     */
-    public function edit($id)
-    {
-        $category = Category::findOrFail($id);
-        $categories = Category::where('id', '!=', $id)->get();
-
-        return view('categories.edit', compact('category', 'categories'));
-    }
 
     /**
-     * Cập nhật thông tin danh mục.
+     * Cập nhật danh mục.
      */
     public function update(Request $request, $id)
     {
@@ -104,7 +105,9 @@ class CategoryController extends Controller
             $validated['slug'] = Str::slug($validated['name']);
         }
 
-        // ✅ Nếu có ảnh mới thì xóa ảnh cũ và upload lại
+        // ⭐ SET TRẠNG THÁI
+        $validated['is_active'] = $request->has('is_active') ? 1 : 0;
+
         if ($request->hasFile('image')) {
             if ($category->image && Storage::disk('public')->exists($category->image)) {
                 Storage::disk('public')->delete($category->image);
@@ -114,9 +117,10 @@ class CategoryController extends Controller
 
         $category->update($validated);
 
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Cập nhật danh mục thành công!');
     }
+
 
     /**
      * Xóa danh mục.
@@ -125,14 +129,13 @@ class CategoryController extends Controller
     {
         $category = Category::findOrFail($id);
 
-        // ✅ Xóa ảnh khi xóa danh mục
         if ($category->image && Storage::disk('public')->exists($category->image)) {
             Storage::disk('public')->delete($category->image);
         }
 
         $category->delete();
 
-        return redirect()->route('categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'Xóa danh mục thành công!');
     }
 }

@@ -23,22 +23,15 @@ class Product extends Model
         'image', // nhớ có trường này để lưu ảnh
     ];
 
+    public function images()
+    {
+        return $this->hasMany(ProductImage::class);
+    }
+
     // Quan hệ: 1 sản phẩm thuộc 1 danh mục
     public function category()
     {
         return $this->belongsTo(Category::class);
-    }
-
-    // Quan hệ: 1 sản phẩm có nhiều item (biến thể)
-    public function items()
-    {
-        return $this->hasMany(ProductItem::class);
-    }
-
-    // Quan hệ: 1 sản phẩm có nhiều tính năng
-    public function features()
-    {
-        return $this->hasMany(ProductFeature::class);
     }
 
     // Giảm giá

@@ -1,18 +1,64 @@
 <?php
 
+use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\BannerController as AdminBannerController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use Illuminate\Support\Facades\Route;
 
-// Import các Controller của Admin
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\OrderController;
+// ==================== ADMIN AREA (CHỈ ADMIN) ====================
+Route::prefix('admin')->name('admin.')->group(function () {
 
-Route::get('/', function () {
-    return view('welcome');
+    // Admin login/logout
+    Route::get('login', [AdminLoginController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [AdminLoginController::class, 'login'])->name('login.submit');
+    Route::post('logout', [AdminLoginController::class, 'logout'])->name('logout');
+
+    // Admin dashboard & quản trị
+    Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
+
+        Route::get('dashboard', function () {
+            return view('admin.dashboard');
+        })->name('dashboard');
+
+        // CRUD sản phẩm (Admin)
+        // Admin CRUD sản phẩm
+        Route::get('products', [AdminProductController::class, 'index'])->name('products.index');
+        Route::get('products/create', [AdminProductController::class, 'create'])->name('products.create');
+        Route::post('products', [AdminProductController::class, 'store'])->name('products.store');
+        Route::get('products/{product}/edit', [AdminProductController::class, 'edit'])->name('products.edit');
+        Route::put('products/{product}', [AdminProductController::class, 'update'])->name('products.update');
+        Route::delete('products/{product}', [AdminProductController::class, 'destroy'])->name('products.destroy');
+
+
+        // CRUD danh mục (Admin)
+        Route::get('categories', [AdminCategoryController::class, 'index'])->name('categories.index');
+        Route::post('categories', [AdminCategoryController::class, 'store'])->name('categories.store');
+        Route::put('categories/{category}', [AdminCategoryController::class, 'update'])->name('categories.update');
+        Route::delete('categories/{category}', [AdminCategoryController::class, 'destroy'])->name('categories.destroy');
+
+        // CRUD banner (Admin)
+        Route::get('banners', [AdminBannerController::class, 'index'])->name('banners.index');
+        Route::post('banners', [AdminBannerController::class, 'store'])->name('banners.store');
+        Route::put('banners/{banner}', [AdminBannerController::class, 'update'])->name('banners.update');
+        Route::delete('banners/{banner}', [AdminBannerController::class, 'destroy'])->name('banners.destroy');
+
+        Route::post('products/upload-image', [AdminProductController::class, 'uploadImage'])->name('products.uploadImage');
+        
+    });
 });
+
+
+
+// Trang chủ
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -24,50 +70,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-//HomeController
-Route::get('/', [HomeController::class, 'index'])->name('home');
-
-
-// Route cho admin (cần đăng nhập + role admin)
-Route::middleware(['auth', 'role:admin'])->group(function () {
-    Route::get('products/create', [ProductController::class, 'create']);
-    Route::post('products', [ProductController::class, 'store']);
-    Route::get('products/{id}/edit', [ProductController::class, 'edit']);
-    Route::put('products/{id}', [ProductController::class, 'update']);
-    Route::delete('products/{id}', [ProductController::class, 'destroy']);
-});
-
-// Route công khai, không cần đăng nhập
-// Route hiển thị danh sách sản phẩm
+// ==================== ROUTE CÔNG KHAI ====================
 Route::get('products', [ProductController::class, 'index'])->name('products.index');
-// Route hiển thị chi tiết sản phẩm
 Route::get('products/{id}', [ProductController::class, 'show'])->name('products.show');
-// Route::get('products/{id}', [ProductController::class, 'show'])->name('product.show');
 
-// CartController
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
-require __DIR__.'/auth.php';
-
-// cần có middleware('is_admin') nếu không có tạm thời dùng middleware('auth')
-// --- BẮT ĐẦU VÙNG ADMIN ---
-Route::middleware(['auth', 'is_admin']) // 1. Bảo vệ (Bạn cần tạo middleware 'is_admin' nhé)
-    ->prefix('admin')                     // 2. URL bắt đầu bằng /admin/
-    ->name('admin.')                      // 3. Tên route bắt đầu bằng admin.
-    ->group(function () {
-        
-        // Route cho Dashboard
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard'); // <-- Đây chính là 'admin.dashboard'
-
-        // Bạn có thể định nghĩa sẵn các route khác
-        Route::get('/products', [ProductController::class, 'index'])->name('products');
-        Route::get('/orders', [OrderController::class, 'index'])->name('orders');
-        // ...
-        
-        // Tốt hơn nữa: Dùng Route::resource cho các chức năng CRUD (như Products)
-        // Route::resource('/products', ProductController::class);
-    });
-// --- KẾT THÚC VÙNG ADMIN ---
+require __DIR__ . '/auth.php';
