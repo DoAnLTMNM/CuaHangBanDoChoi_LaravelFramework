@@ -29,15 +29,26 @@
 
             <!-- Danh mục cha -->
             <div class="flex-grow-1 me-2 mb-2">
-                <select name="parent_id" class="form-select w-100" id="parentSelect">
-                    <option value="">Tất cả danh mục cha</option>
-                    @foreach ($parentCategories as $parent)
-                        <option value="{{ $parent->id }}" {{ request('parent_id') == $parent->id ? 'selected' : '' }}>
-                            {{ $parent->name }}
-                        </option>
+                <select name="parent_id" id="parentSelect" class="form-control mb-2">
+                    <option value="">Chọn danh mục cha</option>
+                    @foreach ($allCategories as $category)
+                        @if (!$category->parent_id)
+                            <option value="{{ $category->id }}"
+                                {{ request('parent_id') == $category->id ? 'selected' : '' }}>
+                                {{ $category->name }}
+                            </option>
+                            @foreach ($category->children as $child)
+                                <option value="{{ $child->id }}"
+                                    {{ request('parent_id') == $child->id ? 'selected' : '' }}>
+                                    — {{ $child->name }}
+                                </option>
+                            @endforeach
+                        @endif
                     @endforeach
                 </select>
             </div>
+
+
 
             <!-- Ngày tạo -->
             <div class="flex-grow-1 me-2 mb-2">
@@ -70,20 +81,6 @@
                 }, 500);
             });
         </script>
-
-        <!-- END FILTER -->
-
-        {{-- @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-
-            document.getElementById('dateFrom').addEventListener('change', function() {
-                document.getElementById('filterForm').submit();
-            });
-            document.getElementById('dateTo').addEventListener('change', function() {
-                document.getElementById('filterForm').submit();
-            });
-
-    @endif --}}
 
         <table class="table table-bordered table-hover">
             <thead class="table-dark">
@@ -150,16 +147,17 @@
                                             value="{{ $cate->name }}" required>
                                         <input type="file" name="image" class="form-control mb-2">
                                         <select name="parent_id" class="form-control mb-2">
-                                            <option value="">-- Không có danh mục cha --</option>
-                                            @foreach ($categories as $parent)
-                                                @if ($parent->id != $cate->id)
-                                                    <option value="{{ $parent->id }}"
-                                                        {{ $cate->parent_id == $parent->id ? 'selected' : '' }}>
-                                                        {{ $parent->name }}
-                                                    </option>
+                                            <option value="">Chọn danh mục cha</option>
+                                            @foreach ($allCategories as $category)
+                                                @if (!$category->parent_id)
+                                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                    @foreach ($category->children as $child)
+                                                        <option value="{{ $child->id }}">— {{ $child->name }}</option>
+                                                    @endforeach
                                                 @endif
                                             @endforeach
                                         </select>
+
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" name="is_active" value="1"
                                                 id="is_active_{{ $cate->id }}"
@@ -234,11 +232,17 @@
                             required>
                         <input type="file" name="image" class="form-control mb-2">
                         <select name="parent_id" class="form-control mb-2">
-                            <option value="">-- Không có danh mục cha --</option>
-                            @foreach ($categories as $cate)
-                                <option value="{{ $cate->id }}">{{ $cate->name }}</option>
+                            <option value="">Chọn danh mục cha</option>
+                            @foreach ($allCategories as $category)
+                                @if (!$category->parent_id)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                    @foreach ($category->children as $child)
+                                        <option value="{{ $child->id }}">— {{ $child->name }}</option>
+                                    @endforeach
+                                @endif
                             @endforeach
                         </select>
+
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="is_active" value="1" checked>
                             <label class="form-check-label">Hiển thị</label>

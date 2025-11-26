@@ -47,9 +47,8 @@ class CategoryController extends Controller
         }
 
         // Lấy danh sách category cha để hiển thị combobox
-        $parentCategories = Category::whereNull('parent_id')->get();
-
-        return view('admin.categories.index', compact('categories', 'viewCategory', 'parentCategories'));
+        $allCategories = Category::with('children')->orderBy('name')->get();
+        return view('admin.categories.index', compact('categories', 'viewCategory', 'allCategories'));
     }
 
 

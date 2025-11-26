@@ -4,207 +4,194 @@
 
 @section('content')
 
-    @if (!empty($breadcrumbs))
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                @foreach ($breadcrumbs as $crumb)
-                    @if ($loop->last)
-                        <li class="breadcrumb-item active" aria-current="page">{{ $crumb['title'] }}</li>
-                    @else
-                        <li class="breadcrumb-item"><a href="{{ $crumb['url'] }}">{{ $crumb['title'] }}</a></li>
-                    @endif
-                @endforeach
-            </ol>
-        </nav>
-    @endif
+{{-- Toast container --}}
+<div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index:9999"></div>
 
-    <div class="container mt-4">
-        <div class="row">
-            <!-- Cột trái: Hình ảnh - Sticky -->
-            <div class="col-md-6">
-                {{-- Sticky container cho cả main image + thumbnails --}}
-                <div class="sticky-image-container" style="position: sticky; top: 20px;">
-                    {{-- Hình lớn --}}
-                    <div class="mb-2">
-                        <img id="mainProductImage"
-                            src="{{ $product->images->first() ? asset('storage/' . $product->images->first()->image) : asset('placeholder.png') }}"
-                            alt="{{ $product->name }}" class="img-fluid rounded"
-                            style="width:620px; height:620px; object-fit:cover;">
-                    </div>
+@if (!empty($breadcrumbs))
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        @foreach ($breadcrumbs as $crumb)
+            @if ($loop->last)
+                <li class="breadcrumb-item active" aria-current="page">{{ $crumb['title'] }}</li>
+            @else
+                <li class="breadcrumb-item"><a href="{{ $crumb['url'] }}">{{ $crumb['title'] }}</a></li>
+            @endif
+        @endforeach
+    </ol>
+</nav>
+@endif
 
-                    {{-- Thumbnail slider --}}
-                    @if ($product->images->count() > 1)
-                        <div class="d-flex align-items-center gap-1" style="width:620px;">
-                            <button type="button" id="prevThumb" class="btn btn-outline-secondary btn-sm">&lt;</button>
-                            <div class="overflow-hidden flex-grow-1">
-                                <div id="thumbnailWrapper" class="d-flex" style="transition: transform 0.3s; gap: 4px;">
-                                    @foreach ($product->images as $img)
-                                        <img src="{{ asset('storage/' . $img->image) }}"
-                                            data-full="{{ asset('storage/' . $img->image) }}"
-                                            class="thumbnail-img rounded border"
-                                            style="width:150px; height:150px; object-fit:cover; cursor:pointer;">
-                                    @endforeach
-                                </div>
+<div class="container mt-4">
+    <div class="row">
+        {{-- Cột trái: hình ảnh --}}
+        <div class="col-md-6">
+            <div class="sticky-image-container">
+                <div class="mb-2">
+                    <img id="mainProductImage"
+                         src="{{ $product->images->first() ? asset('storage/' . $product->images->first()->image) : asset('placeholder.png') }}"
+                         alt="{{ $product->name }}"
+                         class="img-fluid rounded"
+                         style="width:620px; height:620px; object-fit:cover;">
+                </div>
+
+                @if($product->images->count() > 1)
+                    <div class="d-flex align-items-center gap-1" style="width:620px;">
+                        <button type="button" id="prevThumb" class="btn btn-outline-secondary btn-sm">&lt;</button>
+                        <div class="overflow-hidden flex-grow-1">
+                            <div id="thumbnailWrapper" class="d-flex" style="transition: transform 0.3s; gap: 4px;">
+                                @foreach ($product->images as $img)
+                                    <img src="{{ asset('storage/' . $img->image) }}"
+                                         data-full="{{ asset('storage/' . $img->image) }}"
+                                         class="thumbnail-img rounded border"
+                                         style="width:150px; height:150px; object-fit:cover; cursor:pointer;">
+                                @endforeach
                             </div>
-                            <button type="button" id="nextThumb" class="btn btn-outline-secondary btn-sm">&gt;</button>
                         </div>
-                    @endif
-                </div>
-            </div>
-
-            <!-- Cột phải: Thông tin sản phẩm -->
-            <div class="col-md-6">
-                <div class="product-info">
-                    <h2 class="mb-3">{{ $product->name }}</h2>
-                    {{-- Hiển thị giá sản phẩm --}}
-                    @php
-                        $finalPrice = $product->price;
-                        $badgeText = '';
-                    @endphp
-
-                    @if ($product->discount && $product->discount->is_active)
-
-                        {{-- Giảm theo phần trăm --}}
-                        @if (!is_null($product->discount->discount_percent) && $product->discount->discount_percent > 0)
-                            @php
-                                $percent = (int) $product->discount->discount_percent;
-                                $finalPrice = $product->price * (1 - $percent / 100);
-                                $badgeText = "-{$percent}%";
-                            @endphp
-
-                            {{-- Giảm theo số tiền --}}
-                        @elseif (!is_null($product->discount->discount_amount) && $product->discount->discount_amount > 0)
-                            @php
-                                $amount = $product->discount->discount_amount;
-                                $finalPrice = $product->price - $amount;
-                                $badgeText = '-' . number_format($amount, 0, ',', '.') . '₫';
-                            @endphp
-                        @endif
-
-                        <div class="mb-3">
-                            <h4 class="text-danger fw-bold">
-                                {{ number_format($finalPrice, 0, ',', '.') }}₫
-                            </h4>
-
-                            <p class="text-muted" style="text-decoration: line-through;">
-                                {{ number_format($product->price, 0, ',', '.') }}₫
-                            </p>
-
-                            <span class="badge bg-danger">{{ $badgeText }}</span>
-                        </div>
-                    @else
-                        <h4 class="text-success fw-bold mb-3">
-                            {{ number_format($product->price, 0, ',', '.') }}₫
-                        </h4>
-                    @endif
-                    <!-- Form thêm vào giỏ -->
-                    <form action="{{ route('cart.add', $product->id) }}" method="POST"
-                        class="d-flex align-items-center mb-4">
-                        @csrf
-                        <div class="input-group" style="width: 132px;">
-                            <button type="button" class="btn btn-outline-secondary quantity-btn"
-                                onclick="this.parentNode.querySelector('input[type=number]').stepDown()">−</button>
-                            <input type="number" name="quantity" value="1" min="1"
-                                class="form-control quantity-input">
-                            <button type="button" class="btn btn-outline-secondary quantity-btn"
-                                onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</button>
-                        </div>
-                        <button type="submit" class="btn btn-danger ms-2 btn-add-to-cart">Thêm vào giỏ hàng</button>
-                    </form>
-                    <!-- Hiển thị slug -->
-                    <p class="text-muted mb-2"><strong>tags:</strong> {{ $product->slug }}</p>
-                    <!-- Mô tả sản phẩm -->
-                    <div class="mb-4">
-                        <h5>Mô tả:</h5>
-                        <div class="product-description">
-                            {!! $product->description ?? '<p>Chưa có mô tả</p>' !!}
-                        </div>
+                        <button type="button" id="nextThumb" class="btn btn-outline-secondary btn-sm">&gt;</button>
                     </div>
+                @endif
+            </div>
+        </div>
 
-                    <a href="{{ route('products.index') }}" class="btn btn-secondary">Quay lại</a>
+        {{-- Cột phải: Thông tin sản phẩm --}}
+        <div class="col-md-6">
+            <div class="product-info">
+                <h2 class="mb-3">{{ $product->name }}</h2>
+
+                @php
+                    $finalPrice = $product->price;
+                    $badgeText = '';
+                @endphp
+
+                @if($product->discount && $product->discount->is_active)
+                    @if(!is_null($product->discount->discount_percent) && $product->discount->discount_percent > 0)
+                        @php
+                            $percent = (int)$product->discount->discount_percent;
+                            $finalPrice = $product->price * (1 - $percent / 100);
+                            $badgeText = "-{$percent}%";
+                        @endphp
+                    @elseif(!is_null($product->discount->discount_amount) && $product->discount->discount_amount > 0)
+                        @php
+                            $amount = $product->discount->discount_amount;
+                            $finalPrice = $product->price - $amount;
+                            $badgeText = '-' . number_format($amount,0,',','.') . '₫';
+                        @endphp
+                    @endif
+
+                    <div class="mb-3">
+                        <h4 class="text-danger fw-bold">{{ number_format($finalPrice,0,',','.') }}₫</h4>
+                        <p class="text-muted" style="text-decoration: line-through;">{{ number_format($product->price,0,',','.') }}₫</p>
+                        <span class="badge bg-danger">{{ $badgeText }}</span>
+                    </div>
+                @else
+                    <h4 class="text-success fw-bold mb-3">{{ number_format($product->price,0,',','.') }}₫</h4>
+                @endif
+
+                {{-- Form thêm vào giỏ hàng --}}
+                <form id="add-to-cart-form" action="{{ route('cart.add', $product->id) }}" method="POST" class="d-flex align-items-center mb-4">
+                    @csrf
+                    <div class="input-group" style="width:132px;">
+                        <button type="button" class="btn btn-outline-secondary quantity-btn" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">−</button>
+                        <input type="number" name="quantity" value="1" min="1" class="form-control quantity-input">
+                        <button type="button" class="btn btn-outline-secondary quantity-btn" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</button>
+                    </div>
+                    <button type="submit" class="btn btn-danger ms-2 btn-add-to-cart">Thêm vào giỏ hàng</button>
+                </form>
+
+                <p class="text-muted mb-2"><strong>tags:</strong> {{ $product->slug }}</p>
+
+                <div class="mb-4">
+                    <h5>Mô tả:</h5>
+                    <div class="product-description">
+                        {!! $product->description ?? '<p>Chưa có mô tả</p>' !!}
+                    </div>
                 </div>
+
+                <a href="{{ route('products.index') }}" class="btn btn-secondary">Quay lại</a>
             </div>
         </div>
     </div>
+</div>
 
-    {{-- CSS tuỳ chọn để mô tả hiển thị đẹp --}}
-    <style>
-        .product-description img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-        }
+{{-- CSS --}}
+<style>
+.product-description img { max-width:100%; height:auto; border-radius:5px; margin-bottom:1rem; }
+.product-description table { width:100%; border-collapse:collapse; margin-bottom:1rem; }
+.product-description table, .product-description th, .product-description td { border:1px solid #ddd; padding:8px; text-align:left; }
+.product-description blockquote { border-left:4px solid #ccc; padding-left:10px; color:#555; margin-bottom:1rem; }
+.sticky-image-container { position:sticky; top:20px; z-index:10; }
+</style>
 
-        .product-description table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1rem;
-        }
+{{-- Script --}}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Thumbnail click
+    const mainImage = document.getElementById('mainProductImage');
+    const thumbnails = document.querySelectorAll('.thumbnail-img');
+    const wrapper = document.getElementById('thumbnailWrapper');
+    const visibleThumbs = 4;
+    let startIndex = 0;
 
-        .product-description table,
-        .product-description th,
-        .product-description td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        .product-description blockquote {
-            border-left: 4px solid #ccc;
-            padding-left: 10px;
-            color: #555;
-            margin-bottom: 1rem;
-        }
-
-        .sticky-image-container {
-            position: sticky;
-            top: 20px;
-            /* Khoảng cách so với top khi scroll */
-            z-index: 10;
-            /* Nếu cần đứng trên các phần khác */
-        }
-    </style>
-
-    {{-- Script đặt cuối --}}
-    <script>
-        window.addEventListener('DOMContentLoaded', function() {
-            const mainImage = document.getElementById('mainProductImage');
-            const thumbnails = document.querySelectorAll('.thumbnail-img');
-            const wrapper = document.getElementById('thumbnailWrapper');
-            const thumbCount = thumbnails.length;
-            const visibleThumbs = 4;
-            let startIndex = 0;
-
-            // Click thumbnail
-            thumbnails.forEach(th => {
-                th.addEventListener('click', () => {
-                    mainImage.src = th.dataset.full;
-                });
-            });
-
-            // Update position
-            function updateThumbPosition() {
-                const style = window.getComputedStyle(thumbnails[0]);
-                const thumbWidth = thumbnails[0].offsetWidth + parseInt(style.marginRight);
-                wrapper.style.transform = `translateX(-${startIndex * (thumbWidth + 4)}px)`;
-            }
-
-            // Previous
-            document.getElementById('prevThumb').addEventListener('click', () => {
-                if (startIndex > 0) {
-                    startIndex--;
-                    updateThumbPosition();
-                }
-            });
-
-            // Next
-            document.getElementById('nextThumb').addEventListener('click', () => {
-                if (startIndex + visibleThumbs < thumbCount) {
-                    startIndex++;
-                    updateThumbPosition();
-                }
-            });
+    thumbnails.forEach(th => {
+        th.addEventListener('click', () => {
+            mainImage.src = th.dataset.full;
         });
-    </script>
+    });
+
+    function updateThumbPosition() {
+        if (!wrapper) return;
+        const style = window.getComputedStyle(thumbnails[0]);
+        const thumbWidth = thumbnails[0].offsetWidth + parseInt(style.marginRight);
+        wrapper.style.transform = `translateX(-${startIndex * (thumbWidth + 4)}px)`;
+    }
+
+    const prevBtn = document.getElementById('prevThumb');
+    const nextBtn = document.getElementById('nextThumb');
+    if(prevBtn) prevBtn.addEventListener('click', () => { if(startIndex>0){startIndex--; updateThumbPosition();} });
+    if(nextBtn) nextBtn.addEventListener('click', () => { if(startIndex+visibleThumbs<thumbnails.length){startIndex++; updateThumbPosition();} });
+
+    // Toast
+    function showToast(message) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        toast.classList.add('toast','align-items-center','text-bg-success','border-0','show');
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        `;
+        container.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
+
+    // AJAX thêm vào giỏ hàng
+    const addForm = document.getElementById('add-to-cart-form');
+    addForm.addEventListener('submit', function(e){
+        e.preventDefault();
+        const formData = new FormData(this);
+        fetch(this.action, {
+            method:'POST',
+            headers:{
+                'X-CSRF-TOKEN':'{{ csrf_token() }}',
+                'X-Requested-With':'XMLHttpRequest'
+            },
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.success) {
+                showToast(data.success);
+                // Cập nhật số lượng giỏ hàng (nếu bạn có span#cart-count)
+                const cartCount = document.getElementById('cart-count');
+                if(cartCount && data.cartCount !== undefined){
+                    cartCount.textContent = data.cartCount;
+                }
+            }
+        })
+        .catch(err => console.error(err));
+    });
+});
+</script>
+
 @endsection

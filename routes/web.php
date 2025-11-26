@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
@@ -57,6 +58,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 // Trang chủ
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -75,6 +77,6 @@ Route::get('products/{id}', [ProductController::class, 'show'])->name('products.
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
-Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
 require __DIR__ . '/auth.php';

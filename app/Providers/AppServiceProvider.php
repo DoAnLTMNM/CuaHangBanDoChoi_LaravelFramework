@@ -30,5 +30,18 @@ class AppServiceProvider extends ServiceProvider
         View::share('categories', $categories);
         // phân trang 
         Paginator::useBootstrapFive();
+
+    //         view()->composer('*', function ($view) {
+    //     $categories = Category::whereNull('parent_id') // chỉ category cha
+    //         ->where('is_active', 1) // chỉ lấy đang hoạt động
+    //         ->with(['children' => function ($q) {
+    //             $q->where('is_active', 1); // chỉ lấy con đang hoạt động
+    //         }])
+    //         ->orderBy('id', 'DESC')
+    //         ->take(9)
+    //         ->get();
+
+    //     $view->with('categories', $categories);
+    // });
     }
 }

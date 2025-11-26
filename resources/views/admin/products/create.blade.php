@@ -41,17 +41,24 @@
                         <input type="file" name="images[]" id="images" class="form-control" multiple>
                         <div id="previewImages" class="d-flex flex-wrap mt-2"></div>
                     </div>
-
                     <!-- Danh mục -->
                     <div class="mb-3">
                         <label for="category_id">Danh mục</label>
                         <select name="category_id" id="category_id" class="form-select">
                             <option value="">-- Không có danh mục --</option>
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+
+                            @foreach ($allCategories as $category)
+                                @if (!$category->parent_id)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+
+                                    @foreach ($category->children as $child)
+                                        <option value="{{ $child->id }}">— {{ $child->name }}</option>
+                                    @endforeach
+                                @endif
                             @endforeach
                         </select>
                     </div>
+
 
                     <!-- Thương hiệu -->
                     <div class="mb-3">

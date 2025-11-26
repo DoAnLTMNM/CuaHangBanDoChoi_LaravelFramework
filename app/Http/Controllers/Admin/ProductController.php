@@ -65,8 +65,9 @@ class ProductController extends Controller
 
     public function create()
     {
-        $categories = Category::where('is_active', 1)->get();
-        return view('admin.products.create', compact('categories'));
+        $allCategories = Category::with('children')->get();
+
+        return view('admin.products.create', compact('allCategories'));
     }
 
     /**
@@ -193,5 +194,4 @@ class ProductController extends Controller
 
         return response()->json(['error' => 'No file uploaded'], 400);
     }
-
 }
