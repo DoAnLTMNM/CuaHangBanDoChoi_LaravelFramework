@@ -120,6 +120,21 @@
 .product-description table, .product-description th, .product-description td { border:1px solid #ddd; padding:8px; text-align:left; }
 .product-description blockquote { border-left:4px solid #ccc; padding-left:10px; color:#555; margin-bottom:1rem; }
 .sticky-image-container { position:sticky; top:20px; z-index:10; }
+/* .product-description {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+}
+
+.product-description iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+} */
 </style>
 
 {{-- Script --}}

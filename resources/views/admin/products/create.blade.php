@@ -86,7 +86,8 @@
         </div>
     </div>
 
-    <script src="https://cdn.ckeditor.com/ckeditor5/38.1.1/classic/ckeditor.js"></script>
+<script src="https://cdn.ckeditor.com/ckeditor5/41.2.1/classic/ckeditor.js"></script>
+
     <script>
         class MyUploadAdapter {
             constructor(loader) {
@@ -133,13 +134,12 @@
             .create(document.querySelector('#description'), {
                 extraPlugins: [MyCustomUploadAdapterPlugin],
                 toolbar: [
-                    'heading', '|',
-                    'bold', 'italic', 'underline', 'strikethrough', '|',
-                    'fontColor', 'fontBackgroundColor', '|',
-                    'alignment:left', 'alignment:center', 'alignment:right', 'alignment:justify', '|',
-                    'link', 'bulletedList', 'numberedList', 'blockQuote', '|',
-                    'insertTable', 'undo', 'redo', '|',
-                    'imageUpload'
+                    'heading',
+            '|', 'bold', 'italic', 'underline', 'strikethrough',
+            '|', 'alignment:left', 'alignment:center', 'alignment:right',
+            '|', 'link', 'bulletedList', 'numberedList', 'blockQuote',
+            '|', 'insertTable', 'undo', 'redo', 'imageUpload',
+            '|', 'mediaEmbed', 'htmlEmbed'
                 ],
                 image: {
                     toolbar: [
