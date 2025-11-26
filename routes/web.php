@@ -6,6 +6,10 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 
+// Import các Controller của Admin
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\OrderController;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -47,3 +51,23 @@ Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.
 Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
 require __DIR__.'/auth.php';
+
+// cần có middleware('is_admin') nếu không có tạm thời dùng middleware('auth')
+// --- BẮT ĐẦU VÙNG ADMIN ---
+Route::middleware(['auth', 'is_admin']) // 1. Bảo vệ (Bạn cần tạo middleware 'is_admin' nhé)
+    ->prefix('admin')                     // 2. URL bắt đầu bằng /admin/
+    ->name('admin.')                      // 3. Tên route bắt đầu bằng admin.
+    ->group(function () {
+        
+        // Route cho Dashboard
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard'); // <-- Đây chính là 'admin.dashboard'
+
+        // Bạn có thể định nghĩa sẵn các route khác
+        Route::get('/products', [ProductController::class, 'index'])->name('products');
+        Route::get('/orders', [OrderController::class, 'index'])->name('orders');
+        // ...
+        
+        // Tốt hơn nữa: Dùng Route::resource cho các chức năng CRUD (như Products)
+        // Route::resource('/products', ProductController::class);
+    });
+// --- KẾT THÚC VÙNG ADMIN ---
