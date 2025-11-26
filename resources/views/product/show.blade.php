@@ -3,6 +3,21 @@
 @section('title', $product->name)
 
 @section('content')
+
+    @if (!empty($breadcrumbs))
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                @foreach ($breadcrumbs as $crumb)
+                    @if ($loop->last)
+                        <li class="breadcrumb-item active" aria-current="page">{{ $crumb['title'] }}</li>
+                    @else
+                        <li class="breadcrumb-item"><a href="{{ $crumb['url'] }}">{{ $crumb['title'] }}</a></li>
+                    @endif
+                @endforeach
+            </ol>
+        </nav>
+    @endif
+    
     <div class="container mt-4">
         <div class="row">
             <!-- Cột trái: Hình ảnh - Sticky -->

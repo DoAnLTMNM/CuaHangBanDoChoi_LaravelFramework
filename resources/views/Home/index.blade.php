@@ -107,10 +107,3 @@ document.querySelectorAll('.product-hover-image').forEach(img => {
 
 @endsection
 
-{{-- <script>
-    const myCarousel = document.querySelector('#bannerCarousel');
-    const carousel = new bootstrap.Carousel(myCarousel, {
-        interval: 2000, 
-        ride: 'carousel'
-    });
-</script> --}}

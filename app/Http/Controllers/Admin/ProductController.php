@@ -194,34 +194,4 @@ class ProductController extends Controller
         return response()->json(['error' => 'No file uploaded'], 400);
     }
 
-
-    public function getSaleProducts($limit = 5)
-    {
-        return Product::with('images', 'discount')
-            ->whereHas('discount', function ($q) {
-                $q->where('is_active', 1)
-                    ->where(function ($q2) {
-                        $q2->whereNotNull('discount_percent')
-                            ->orWhereNotNull('discount_amount');
-                    });
-            })
-            ->take($limit)
-            ->get();
-    }
-
-    public function getLatestProducts($limit = 8)
-    {
-        return Product::with('images')
-            ->orderByDesc('created_at')
-            ->take($limit)
-            ->get();
-    }
-
-    public function show($id)
-    {
-        // Lấy sản phẩm với hình ảnh và giảm giá
-        $product = \App\Models\Product::with(['images', 'discount', 'category'])->findOrFail($id);
-
-        return view('product.show', compact('product'));
-    }
 }
