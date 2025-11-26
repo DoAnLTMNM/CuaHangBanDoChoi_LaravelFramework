@@ -1,7 +1,4 @@
 <aside class="main-sidebar">
-    <!-- Dedicated button for Trang chủ -->
-
-
     <nav class="sidebar-nav">
         <a href="{{ url('/') }}" class="home-button {{ request()->is('/') ? 'active' : '' }}">
             <span>Trang chủ</span>
@@ -15,7 +12,6 @@
         <h4 class="mb-3">Sản phẩm khuyến mãi</h4>
 
         @php
-            // Lấy 5 sản phẩm đang giảm giá
             $saleProducts = \App\Models\Product::with('images', 'discount')
                 ->whereHas('discount', function ($q) {
                     $q->where('is_active', 1);
@@ -26,6 +22,10 @@
 
         @foreach ($saleProducts as $product)
             @php
+                $firstImage = $product->images->first()
+                    ? asset('storage/' . $product->images->first()->image)
+                    : asset('placeholder.png');
+
                 $discountedPrice = $product->price;
                 if ($product->discount) {
                     if ($product->discount->discount_percent) {
@@ -36,25 +36,48 @@
                 }
             @endphp
 
-            <div class="card mb-2 d-flex flex-row align-items-center card-sales">
-                <img src="{{ $product->images->first() ? asset('storage/' . $product->images->first()->image) : asset('placeholder.png') }}"
-                    class="me-2" style="width: 90px; height: 90px; object-fit: cover;">
-                <div class="flex-grow-1">
-                    <h4 class="mb-1 product-name" style="font-size: 0.9rem;">
-                        {{ $product->name }}
-                    </h4>
+            <a href="{{ route('products.show', $product->id) }}"
+               class="text-decoration-none text-dark"
+               style="display:block; margin-bottom: 1rem;">
 
-                    <div>
-                        <span class="text-muted" style="text-decoration: line-through; font-size:0.8rem;">
-                            {{ number_format($product->price, 0, '.', ',') }}₫
-                        </span>
-                        <span class="text-danger fw-bold" style="font-size:0.9rem;">
-                            {{ number_format($discountedPrice, 0, '.', ',') }}₫
-                        </span>
+                <div class="card d-flex flex-row align-items-center card-sales"
+                     style="cursor:pointer; border-radius:10px; padding:8px;">
+
+                    <img src="{{ $firstImage }}"
+                         class="me-2 rounded"
+                         style="width: 90px; height: 90px; object-fit: cover;">
+
+                    <div class="flex-grow-1">
+
+                        <h6 class="mb-1"
+                            style="font-size:0.9rem; font-weight:600; height:2.2em; overflow:hidden; text-transform:uppercase;">
+                            {{ $product->name }}
+                        </h6>
+
+                        <div>
+                            <span class="text-muted"
+                                  style="text-decoration: line-through; font-size:0.8rem;">
+                                {{ number_format($product->price, 0, '.', ',') }}₫
+                            </span>
+
+                            <span class="text-danger fw-bold" style="font-size:0.9rem;">
+                                {{ number_format($discountedPrice, 0, '.', ',') }}₫
+                            </span>
+                        </div>
+
                     </div>
+
                 </div>
-            </div>
+            </a>
+
         @endforeach
     </div>
 
 </aside>
+
+<style>
+    .card-sales:hover {
+        background-color: #f8f8f8;
+        transition: .2s ease;
+    }
+</style>
