@@ -33,7 +33,7 @@
             ->get();
     @endphp
 
-    <div class="d-flex flex-wrap justify-content-between">
+    <div class="d-flex gap-2 flex-wrap">
         @foreach ($latestProducts as $product)
             @php
                 $discountedPrice = $product->price;
