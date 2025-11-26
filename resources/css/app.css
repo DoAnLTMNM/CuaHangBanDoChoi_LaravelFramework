@@ -138,3 +138,41 @@ ul {
 {
     border-color: rgb(255, 247, 247);
 }
+
+
+/* sidle bar */
+.product-name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* tối đa 2 dòng */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2em; /* chỉnh theo font-size để đẹp */
+    max-height: 2.4em; /* line-height * số dòng */
+}
+
+
+
+.product-description img {
+    max-width: 100%;
+    height: auto;
+}
+
+.product-description table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.product-description table, 
+.product-description th, 
+.product-description td {
+    border: 1px solid #ddd;
+}
+
+.product-description blockquote {
+    border-left: 4px solid #ccc;
+    padding-left: 10px;
+    color: #555;
+}
+
+

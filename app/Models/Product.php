@@ -34,18 +34,6 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    // Quan hệ: 1 sản phẩm có nhiều item (biến thể)
-    public function items()
-    {
-        return $this->hasMany(ProductItem::class);
-    }
-
-    // Quan hệ: 1 sản phẩm có nhiều tính năng
-    public function features()
-    {
-        return $this->hasMany(ProductFeature::class);
-    }
-
     // Giảm giá
     public function discount()
     {

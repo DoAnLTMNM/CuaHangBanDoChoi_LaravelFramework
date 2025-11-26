@@ -47,6 +47,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('banners', [AdminBannerController::class, 'store'])->name('banners.store');
         Route::put('banners/{banner}', [AdminBannerController::class, 'update'])->name('banners.update');
         Route::delete('banners/{banner}', [AdminBannerController::class, 'destroy'])->name('banners.destroy');
+
+        Route::post('products/upload-image', [AdminProductController::class, 'uploadImage'])->name('products.uploadImage');
+        
     });
 });
 

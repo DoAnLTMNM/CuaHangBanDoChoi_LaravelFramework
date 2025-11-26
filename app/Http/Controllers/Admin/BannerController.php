@@ -17,14 +17,20 @@ class BannerController extends Controller
         $query = Banner::orderByDesc('id');
 
         // Lọc trạng thái
-        if ($request->filled('status') && in_array($request->status, ['0','1'])) {
-            $query->where('is_active', $request->status);
+        if ($request->filled('is_active') && in_array($request->is_active, ['0', '1'])) {
+            $query->where('is_active', $request->is_active);
+        }
+
+        // Tìm kiếm theo tiêu đề
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
         }
 
         $banners = $query->paginate(10)->appends($request->query());
 
         return view('admin.banners.index', compact('banners'));
     }
+
 
     /**
      * Hiển thị form tạo banner
@@ -45,8 +51,11 @@ class BannerController extends Controller
             'target_type' => 'nullable|string|max:50',
             'target_id' => 'nullable|integer',
             'link_url' => 'nullable|url|max:255',
-            'is_active' => 'boolean',
+            'is_active' => 'nullable|boolean', // trạng thái có thể null
         ]);
+
+        // Chuyển trạng thái checkbox về 0/1
+        $validated['is_active'] = $request->has('is_active') ? 1 : 0;
 
         if ($request->hasFile('image_url')) {
             $validated['image_url'] = $request->file('image_url')->store('banners', 'public');
@@ -76,8 +85,11 @@ class BannerController extends Controller
             'target_type' => 'nullable|string|max:50',
             'target_id' => 'nullable|integer',
             'link_url' => 'nullable|url|max:255',
-            'is_active' => 'boolean',
+            'is_active' => 'nullable|boolean',
         ]);
+
+        // Checkbox trạng thái
+        $validated['is_active'] = $request->has('is_active') ? 1 : 0;
 
         if ($request->hasFile('image_url')) {
             if ($banner->image_url && Storage::disk('public')->exists($banner->image_url)) {

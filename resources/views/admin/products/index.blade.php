@@ -38,6 +38,16 @@
                 </select>
             </div>
 
+            <!-- Trạng thái giảm giá -->
+            <div class="col-md-2">
+                <select name="discount_status" class="form-select" id="discountStatusSelect">
+                    <option value="">tất cả các sản phẩm</option>
+                    <option value="1" {{ request('discount_status') === '1' ? 'selected' : '' }}>Đang giảm giá</option>
+                    <option value="0" {{ request('discount_status') === '0' ? 'selected' : '' }}>Không giảm giá
+                    </option>
+                </select>
+            </div>
+
             <!-- Ngày tạo -->
             <div class="col-md-2">
                 <input type="date" name="created_date" value="{{ request('created_date') }}" class="form-control"
@@ -46,11 +56,12 @@
         </form>
 
         <script>
-            ['statusSelect', 'categorySelect', 'createdDate'].forEach(id => {
+            ['statusSelect', 'categorySelect', 'discountStatusSelect', 'createdDate'].forEach(id => {
                 document.getElementById(id).addEventListener('change', () => {
                     document.getElementById('filterForm').submit();
                 });
             });
+
 
             // Debounce tìm kiếm tên
             let typingTimer;
@@ -70,6 +81,7 @@
                     <th>Tên sản phẩm</th>
                     <th>Danh mục</th>
                     <th>Giá</th>
+                    {{-- <th>Giảm giá</th> --}}
                     <th>Kho</th>
                     <th>Trạng thái</th>
                     <th width="180px">Hành động</th>
@@ -92,7 +104,42 @@
 
                         <td>{{ $product->name }}</td>
                         <td>{{ $product->category ? $product->category->name : 'Không' }}</td>
-                        <td>{{ number_format($product->price, 0, '.', ',') }}</td>
+                        <td>
+                            @php
+                                $discountedPrice = $product->price; // giá sau giảm
+                                $hasDiscount = $product->discount && $product->discount->is_active;
+                                if ($hasDiscount) {
+                                    if ($product->discount->discount_percent) {
+                                        $discountedPrice =
+                                            $product->price * (1 - $product->discount->discount_percent / 100);
+                                    } elseif ($product->discount->discount_amount) {
+                                        $discountedPrice = max(
+                                            $product->price - $product->discount->discount_amount,
+                                            0,
+                                        );
+                                    }
+                                }
+                            @endphp
+
+                            @if ($hasDiscount)
+                                <span class="text-muted" style="text-decoration: line-through;">
+                                    {{ number_format($product->price, 0, '.', ',') }}₫
+                                </span>
+                                <br>
+                                <span class="text-danger fw-bold">
+                                    {{ number_format($discountedPrice, 0, '.', ',') }}₫
+                                </span>
+                            @else
+                                {{ number_format($product->price, 0, '.', ',') }}₫
+                            @endif
+                        </td>
+                        {{-- <td>
+                            @if ($product->discount && $product->discount->is_active)
+                                <span class="badge bg-success">Đang giảm</span>
+                            @else
+                                <span class="badge bg-secondary">Không</span>
+                            @endif
+                        </td> --}}
                         <td>{{ $product->stock ?? 0 }}</td>
                         <td>
                             @if ($product->is_active)

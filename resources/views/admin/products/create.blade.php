@@ -1,5 +1,6 @@
 @extends('admin.layouts.app')
 @vite('resources/js/admin/product/create.product.js')
+
 @section('content')
     <div class="container mt-4">
         <h2>Thêm sản phẩm mới</h2>
@@ -52,6 +53,18 @@
                         </select>
                     </div>
 
+                    <!-- Thương hiệu -->
+                    <div class="mb-3">
+                        <label for="brand" class="form-label">Thương hiệu</label>
+                        <input type="text" name="brand" id="brand" class="form-control"
+                            value="{{ old('brand') }}">
+                    </div>
+                    <!-- Mô tả sản phẩm -->
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Mô tả sản phẩm</label>
+                        <textarea name="description" id="description">{{ old('description') }}</textarea>
+                    </div>
+
                     <!-- Trạng thái -->
                     <div class="form-check mb-3">
                         <input type="checkbox" name="is_active" id="is_active" class="form-check-input" value="1"
@@ -59,18 +72,79 @@
                         <label class="form-check-label" for="is_active" id="is_active_label">Hiển thị</label>
                     </div>
 
-                    <!-- Thương hiệu -->
-                    <div class="mb-3">
-                        <label for="brand" class="form-label">Thương hiệu</label>
-                        <input type="text" name="brand" id="brand" class="form-control"
-                            value="{{ old('brand') }}">
-                    </div>
-
-
                     <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
                     <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">Hủy</a>
                 </form>
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.ckeditor.com/ckeditor5/38.1.1/classic/ckeditor.js"></script>
+    <script>
+        class MyUploadAdapter {
+            constructor(loader) {
+                this.loader = loader;
+            }
+
+            upload() {
+                return this.loader.file.then(file => new Promise((resolve, reject) => {
+                    const data = new FormData();
+                    data.append('upload', file);
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', "{{ route('admin.products.uploadImage') }}", true);
+                    xhr.responseType = 'json';
+
+                    xhr.setRequestHeader('X-CSRF-TOKEN',
+                        document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    );
+
+                    xhr.onload = () => {
+                        if (xhr.status === 201) {
+                            resolve({
+                                default: xhr.response.url
+                            });
+                        } else {
+                            reject('Upload error');
+                        }
+                    };
+
+                    xhr.onerror = () => reject('Upload error');
+                    xhr.send(data);
+                }));
+            }
+
+            abort() {}
+        }
+
+        function MyCustomUploadAdapterPlugin(editor) {
+            editor.plugins.get('FileRepository').createUploadAdapter =
+                (loader) => new MyUploadAdapter(loader);
+        }
+
+        ClassicEditor
+            .create(document.querySelector('#description'), {
+                extraPlugins: [MyCustomUploadAdapterPlugin],
+                toolbar: [
+                    'heading', '|',
+                    'bold', 'italic', 'underline', 'strikethrough', '|',
+                    'fontColor', 'fontBackgroundColor', '|',
+                    'alignment:left', 'alignment:center', 'alignment:right', 'alignment:justify', '|',
+                    'link', 'bulletedList', 'numberedList', 'blockQuote', '|',
+                    'insertTable', 'undo', 'redo', '|',
+                    'imageUpload'
+                ],
+                image: {
+                    toolbar: [
+                        'imageTextAlternative',
+                        'imageStyle:full',
+                        'imageStyle:side'
+                    ]
+                },
+                table: {
+                    contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+                }
+            })
+            .catch(error => console.error(error));
+    </script>
 @endsection
