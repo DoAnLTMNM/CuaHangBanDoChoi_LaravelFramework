@@ -17,7 +17,7 @@
             </ol>
         </nav>
     @endif
-    
+
     <div class="container mt-4">
         <div class="row">
             <!-- Cột trái: Hình ảnh - Sticky -->
@@ -52,14 +52,51 @@
                 </div>
             </div>
 
-
-
             <!-- Cột phải: Thông tin sản phẩm -->
             <div class="col-md-6">
                 <div class="product-info">
                     <h2 class="mb-3">{{ $product->name }}</h2>
-                    <h4 class="text-success fw-bold mb-3">{{ number_format($product->price, 0, ',', '.') }}₫</h4>
+                    {{-- Hiển thị giá sản phẩm --}}
+                    @php
+                        $finalPrice = $product->price;
+                        $badgeText = '';
+                    @endphp
 
+                    @if ($product->discount && $product->discount->is_active)
+
+                        {{-- Giảm theo phần trăm --}}
+                        @if (!is_null($product->discount->discount_percent) && $product->discount->discount_percent > 0)
+                            @php
+                                $percent = (int) $product->discount->discount_percent;
+                                $finalPrice = $product->price * (1 - $percent / 100);
+                                $badgeText = "-{$percent}%";
+                            @endphp
+
+                            {{-- Giảm theo số tiền --}}
+                        @elseif (!is_null($product->discount->discount_amount) && $product->discount->discount_amount > 0)
+                            @php
+                                $amount = $product->discount->discount_amount;
+                                $finalPrice = $product->price - $amount;
+                                $badgeText = '-' . number_format($amount, 0, ',', '.') . '₫';
+                            @endphp
+                        @endif
+
+                        <div class="mb-3">
+                            <h4 class="text-danger fw-bold">
+                                {{ number_format($finalPrice, 0, ',', '.') }}₫
+                            </h4>
+
+                            <p class="text-muted" style="text-decoration: line-through;">
+                                {{ number_format($product->price, 0, ',', '.') }}₫
+                            </p>
+
+                            <span class="badge bg-danger">{{ $badgeText }}</span>
+                        </div>
+                    @else
+                        <h4 class="text-success fw-bold mb-3">
+                            {{ number_format($product->price, 0, ',', '.') }}₫
+                        </h4>
+                    @endif
                     <!-- Form thêm vào giỏ -->
                     <form action="{{ route('cart.add', $product->id) }}" method="POST"
                         class="d-flex align-items-center mb-4">

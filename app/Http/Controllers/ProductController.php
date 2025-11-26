@@ -98,7 +98,7 @@ class ProductController extends Controller
 
     // 
 
-        public function getSaleProducts($limit = 5)
+    public function getSaleProducts($limit = 5)
     {
         return Product::with('images', 'discount')
             ->whereHas('discount', function ($q) {
@@ -120,9 +120,9 @@ class ProductController extends Controller
             ->get();
     }
 
-        public function show($id)
+    public function show($id)
     {
-        $product = \App\Models\Product::with('category')->findOrFail($id);
+        $product = \App\Models\Product::with(['category', 'discount'])->findOrFail($id);
 
         // Tạo breadcrumbs
         $breadcrumbs = [
