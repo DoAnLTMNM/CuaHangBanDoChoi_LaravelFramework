@@ -64,7 +64,7 @@
                         </a>
 
                         @if ($category->children->count())
-                            <button class="cat-toggle-btn" data-bs-toggle="dropdown" aria-expanded="false">▾</button>
+                            <button class="cat-toggle-btn" data-bs-toggle="dropdown" aria-expanded="false"></button>
                             <ul class="dropdown-menu">
                                 @foreach ($category->children as $child)
                                     <li><a class="dropdown-item" href="{{ url('/category/' . $child->slug) }}">{{ $child->name }}</a></li>
