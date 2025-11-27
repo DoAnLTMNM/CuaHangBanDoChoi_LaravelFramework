@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
@@ -50,7 +51,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('banners/{banner}', [AdminBannerController::class, 'destroy'])->name('banners.destroy');
 
         Route::post('products/upload-image', [AdminProductController::class, 'uploadImage'])->name('products.uploadImage');
-        
     });
 });
 
@@ -68,6 +68,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+
+    Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])->name('checkout.success');
+
+// VNPay
+Route::get('/checkout/vnpay/{order}', [CheckoutController::class,'vnpayPayment'])->name('vnpay.payment');
+Route::get('/checkout/vnpay-return', [CheckoutController::class,'vnpayReturn'])->name('vnpay.return');
+
+// Momo
+Route::get('/checkout/momo/{order}', [CheckoutController::class,'momoPayment'])->name('momo.payment');
+Route::post('/checkout/momo-ipn', [CheckoutController::class,'momoIpn'])->name('momo.ipn');
+
+
 });
 
 // ==================== ROUTE CÔNG KHAI ====================
@@ -78,5 +93,6 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+
 
 require __DIR__ . '/auth.php';
