@@ -30,4 +30,29 @@ use HasFactory;
     {
         return $this->belongsTo(User::class);
     }
+
+        // Helper: chuyển status sang tiếng Việt
+    public function getStatusTextAttribute()
+    {
+        $map = [
+            'pending' => 'Chờ xác nhận',
+            'processing' => 'Đang xử lý',
+            'completed' => 'Hoàn thành',
+            'cancelled' => 'Đã hủy',
+        ];
+
+        return $map[$this->status] ?? $this->status;
+    }
+
+    public function getPaymentStatusTextAttribute()
+    {
+        $map = [
+            'pending' => 'Chờ thanh toán',
+            'unpaid' => 'Chưa thanh toán',
+            'paid' => 'Đã thanh toán',
+            'failed' => 'Thanh toán thất bại',
+        ];
+
+        return $map[$this->payment_status] ?? $this->payment_status;
+    }
 }

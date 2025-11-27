@@ -82,7 +82,9 @@ Route::get('/checkout/vnpay-return', [CheckoutController::class,'vnpayReturn'])-
 Route::get('/checkout/momo/{order}', [CheckoutController::class,'momoPayment'])->name('momo.payment');
 Route::post('/checkout/momo-ipn', [CheckoutController::class,'momoIpn'])->name('momo.ipn');
 
-
+    Route::get('/orders', [App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [App\Http\Controllers\OrderController::class, 'show'])->name('orders.show');
+    Route::delete('/orders/{order}', [App\Http\Controllers\OrderController::class, 'destroy'])->name('orders.destroy');
 });
 
 // ==================== ROUTE CÔNG KHAI ====================
