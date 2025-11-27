@@ -56,7 +56,7 @@
 
     <div class="d-flex">
         {{-- Sidebar --}}
-        <div class="bg-dark text-white p-3" style="width:15%; min-height:100vh;">
+        <div class="bg-dark text-white" style="width:15%; min-height:100vh;">
             @include('admin.layouts.sidebar')
         </div>
 
