@@ -175,4 +175,21 @@ ul {
     color: #555;
 }
 
+    #searchPopup.show {
+        transform: translateX(0);
+    }
+
+    #searchResults li {
+        padding:6px 8px;
+        border-bottom:1px solid #eee;
+    }
+
+    #searchResults li a {
+        text-decoration:none;
+        color:#333;
+    }
+
+    #searchResults li:hover {
+        background:#f1f1f1;
+    }
 

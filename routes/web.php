@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Controllers\ProfileController;
@@ -95,6 +96,9 @@ Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+
+Route::get('/search', [SearchController::class, 'index'])->name('search'); // Enter
+Route::get('/search-popup', [SearchController::class, 'popup'])->name('search.popup'); // live search
 
 
 require __DIR__ . '/auth.php';
