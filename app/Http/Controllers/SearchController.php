@@ -7,8 +7,7 @@ use App\Models\Product;
 
 class SearchController extends Controller
 {
-    //
-     // Khi nhấn Enter → Search Index
+ // Khi nhấn Enter → Search Index
     public function index(Request $request)
     {
         $keyword = $request->input('q');
@@ -24,19 +23,27 @@ class SearchController extends Controller
     }
 
     // Khi gõ → popup live search
-    public function popup(Request $request)
-    {
-        $keyword = $request->input('q');
-        if (!$keyword) return response()->json([]);
+public function searchPopup(Request $request)
+{
+    $q = $request->query('q');
+    $products = Product::with('images', 'discount')
+        ->where('name', 'LIKE', "%{$q}%")
+        ->get();
 
-        $products = Product::query()
-            ->where('name', 'LIKE', "%{$keyword}%")
-            ->orWhereHas('category', function($query) use ($keyword) {
-                $query->where('name', 'LIKE', "%{$keyword}%");
-            })
-            ->take(5) // chỉ lấy 5 kết quả nhanh
-            ->get();
+    $result = $products->map(function($product){
+        return [
+            'id' => $product->id,
+            'name' => $product->name,
+            'price' => $product->price,
+            'discounted_price' => $product->discount && $product->discount->is_active
+                ? $product->price - ($product->price * $product->discount->value / 100)
+                : null,
+            'discount' => $product->discount && $product->discount->is_active,
+            'images' => $product->images->pluck('image')->toArray(), // lấy tất cả image
+        ];
+    });
 
-        return response()->json($products);
-    }
+    return response()->json($result);
+}
+
 }

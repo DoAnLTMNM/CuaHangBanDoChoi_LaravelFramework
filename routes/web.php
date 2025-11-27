@@ -100,5 +100,8 @@ Route::delete('/cart/remove/{id}', [CartController::class, 'remove'])->name('car
 Route::get('/search', [SearchController::class, 'index'])->name('search'); // Enter
 Route::get('/search-popup', [SearchController::class, 'popup'])->name('search.popup'); // live search
 
+Route::get('/search-popup', [ProductController::class, 'searchPopup']);
+
+
 
 require __DIR__ . '/auth.php';

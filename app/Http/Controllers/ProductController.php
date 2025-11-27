@@ -144,4 +144,34 @@ class ProductController extends Controller
         // Truyền cả product và breadcrumbs vào view
         return view('product.show', compact('product', 'breadcrumbs'));
     }
+
+    public function searchPopup(Request $request)
+    {
+        $query = Product::with(['category', 'images', 'discount'])
+            ->where('is_active', 1)
+            ->orderByDesc('id');
+
+        if ($request->filled('q')) {
+            $query->where('name', 'LIKE', '%' . $request->q . '%');
+        }
+
+        $products = $query->take(10)->get();
+
+        $result = $products->map(function ($p) {
+
+            $firstImage = $p->images->first()
+                ? asset('storage/' . $p->images->first()->image)
+                : asset('images/default.png');
+
+            return [
+                'id' => $p->id,
+                'name' => $p->name,
+                'price' => $p->price,
+                'discount' => $p->discount, // giữ nguyên để view tự xử lý
+                'image' => $firstImage,
+            ];
+        });
+
+        return response()->json($result);
+    }
 }
