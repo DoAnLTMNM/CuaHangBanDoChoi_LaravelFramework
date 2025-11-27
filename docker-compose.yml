@@ -3,7 +3,7 @@ services:
     image: php:8.2-apache
     container_name: laravel_app
     ports:
-      - "8000:80"
+    - "3307:3306"
     volumes:
       - ./:/var/www/html
     depends_on:
