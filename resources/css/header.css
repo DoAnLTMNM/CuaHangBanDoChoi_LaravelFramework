@@ -135,3 +135,150 @@
     display: none !important;
 }
 
+
+        .cat-item {
+            position: relative;
+        }
+
+        .cat-toggle-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0 0 0 4px;
+            cursor: pointer;
+            font-size: 14px;
+            line-height: 1;
+        }
+
+        .cat-toggle-btn:hover {
+            color: #007bff;
+        }
+
+        /* Popup search */
+        #searchPopup {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100%;
+            width: 33.33%;
+            max-width: 400px;
+            background: #fff;
+            transform: translateX(100%);
+            transition: transform 0.3s;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #searchPopup.show {
+            transform: translateX(0);
+        }
+
+        #searchPopup header {
+            padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        #searchPopup header h5 {
+            margin: 0;
+        }
+
+        #searchPopup header button {
+            border: none;
+            background: none;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        #searchPopup .search-body {
+            padding: 16px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        #searchPopup .search-body input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Hot keywords */
+        #hotKeywordsWrapper .hot-keywords a {
+            display: inline-block;
+            margin: 2px;
+            padding: 4px 8px;
+            background: #dc3545;
+            color: #fff;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        /* Card sản phẩm */
+        #searchResults a {
+            text-decoration: none;
+            color: #333;
+        }
+
+        .card-sales {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            cursor: pointer;
+            border: none;
+            border-bottom: 1px solid #eee;
+            padding: 8px 0;
+            border-radius: 0;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .card-sales img {
+            width: 90px;
+            height: 90px;
+            object-fit: cover;
+            margin-right: 8px;
+            border-radius: 4px;
+        }
+
+        .card-sales h6 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            height: 2.2em;
+            overflow: hidden;
+            text-transform: uppercase;
+            margin: 0;
+        }
+
+        .card-sales .price {
+            margin-top: 4px;
+        }
+
+        .card-sales .price span {
+            margin-right: 8px;
+        }
+
+        .card-sales:hover {
+            background: #f8f9fa;
+        }
+
+        /* Overlay màn đen */
+        #searchOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 9998;
+            display: none;
+        }
+
+        #searchOverlay.show {
+            display: block;
+        }

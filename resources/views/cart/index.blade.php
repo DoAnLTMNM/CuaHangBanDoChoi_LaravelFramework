@@ -14,7 +14,7 @@
                 <!-- Danh sách sản phẩm -->
                 <div class="cart-items-list col-md-8">
                     <div class="p-3 number-products">
-                        Bạn đang có <strong>{{ count($cartItems) }}</strong> sản phẩm trong giỏ hàng
+                        Bạn đang có <strong>{{ count($cartItems) }}</strong> loại sản phẩm trong giỏ hàng
                     </div>
 
                     @foreach ($cartItems as $item)
@@ -68,19 +68,19 @@
                                     <div class="d-inline-flex align-items-center">
                                         <div class="input-group input-group-sm" style="width:110px;">
                                             <button style="border-radius: 0" type="button"
-                                                class="btn btn-outline-secondary btn-minus">−</button>
+                                                class="btn btn-outline-secondary btn-minus cart-update-btn">−</button>
                                             <input type="number" class="form-control text-center quantity-input"
                                                 value="{{ $quantity }}" min="1" data-id="{{ $cartId }}"
                                                 data-url="{{ route('cart.update', $cartId) }}">
                                             <button style="border-radius: 0" type="button"
-                                                class="btn btn-outline-secondary btn-plus">+</button>
+                                                class="btn btn-outline-secondary btn-plus cart-update-btn">+</button>
                                         </div>
                                     </div>
                                 </div>
 
                                 {{-- Nút Xóa bằng button --}}
                                 <div class="ms-3">
-                                    <button type="button" class="btn btn-link text-danger p-0 btn-remove"
+                                    <button type="button" class="btn btn-link text-danger p-0 btn-remove cart-delete-btn"
                                         data-id="{{ $cartId }}" data-url="{{ route('cart.remove', $cartId) }}">
                                         <i class="bi bi-trash-fill" style="font-size:1.2rem;"></i>
                                     </button>

@@ -76,54 +76,62 @@ class CartController extends Controller
     }
 
     // Cập nhật số lượng
-    public function update(Request $request, $id)
-    {
-        $quantity = max(1, (int) $request->quantity);
-        $successMessage = 'Cập nhật số lượng thành công!';
+public function update(Request $request, $id)
+{
+    $quantity = max(1, (int) $request->quantity);
+    $successMessage = 'Cập nhật số lượng thành công!';
 
-        if (Auth::check()) {
-            $cartItem = Cart::find($id);
-            if ($cartItem && $cartItem->user_id == Auth::id()) {
-                $cartItem->quantity = $quantity;
-                $cartItem->save();
-            }
-        } else {
-            $cart = $request->session()->get('cart', []);
-            if (isset($cart[$id])) {
-                $cart[$id]['quantity'] = $quantity;
-                $request->session()->put('cart', $cart);
-            }
+    if (Auth::check()) {
+        $cartItem = Cart::find($id);
+        if ($cartItem && $cartItem->user_id == Auth::id()) {
+            $cartItem->quantity = $quantity;
+            $cartItem->save();
         }
 
-        if ($request->ajax()) {
-            return response()->json(['success' => $successMessage]);
+        $cartCount = Cart::where('user_id', Auth::id())->sum('quantity');
+    } else {
+        $cart = $request->session()->get('cart', []);
+        if (isset($cart[$id])) {
+            $cart[$id]['quantity'] = $quantity;
+            $request->session()->put('cart', $cart);
         }
-
-        return redirect()->back()->with('success', $successMessage);
+        $cartCount = array_sum(array_map(fn($i) => $i['quantity'], $request->session()->get('cart', [])));
     }
+
+    if ($request->ajax()) {
+        return response()->json(['success' => $successMessage, 'cartCount' => $cartCount]);
+    }
+
+    return redirect()->back()->with('success', $successMessage);
+}
+
 
     // Xóa sản phẩm
-    public function remove(Request $request, $id)
-    {
-        $successMessage = 'Xóa sản phẩm khỏi giỏ hàng thành công!';
+public function remove(Request $request, $id)
+{
+    $successMessage = 'Xóa sản phẩm khỏi giỏ hàng thành công!';
 
-        if (Auth::check()) {
-            $cartItem = Cart::find($id);
-            if ($cartItem && $cartItem->user_id == Auth::id()) {
-                $cartItem->delete();
-            }
-        } else {
-            $cart = $request->session()->get('cart', []);
-            if (isset($cart[$id])) {
-                unset($cart[$id]);
-                $request->session()->put('cart', $cart);
-            }
+    if (Auth::check()) {
+        $cartItem = Cart::find($id);
+        if ($cartItem && $cartItem->user_id == Auth::id()) {
+            $cartItem->delete();
         }
 
-        if ($request->ajax()) {
-            return response()->json(['success' => $successMessage]);
+        $cartCount = Cart::where('user_id', Auth::id())->sum('quantity');
+    } else {
+        $cart = $request->session()->get('cart', []);
+        if (isset($cart[$id])) {
+            unset($cart[$id]);
+            $request->session()->put('cart', $cart);
         }
-
-        return redirect()->back()->with('success', $successMessage);
+        $cartCount = array_sum(array_map(fn($i) => $i['quantity'], $request->session()->get('cart', [])));
     }
+
+    if ($request->ajax()) {
+        return response()->json(['success' => $successMessage, 'cartCount' => $cartCount]);
+    }
+
+    return redirect()->back()->with('success', $successMessage);
+}
+
 }
