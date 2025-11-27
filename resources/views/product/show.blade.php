@@ -31,11 +31,11 @@
                          src="{{ $product->images->first() ? asset('storage/' . $product->images->first()->image) : asset('placeholder.png') }}"
                          alt="{{ $product->name }}"
                          class="img-fluid rounded"
-                         style="width:620px; height:620px; object-fit:cover;">
+                         style="width:660px; height:624px; object-fit:cover;">
                 </div>
 
                 @if($product->images->count() > 1)
-                    <div class="d-flex align-items-center gap-1" style="width:620px;">
+                    <div class="d-flex align-items-center gap-1" style="width:624px;">
                         <button type="button" id="prevThumb" class="btn btn-outline-secondary btn-sm">&lt;</button>
                         <div class="overflow-hidden flex-grow-1">
                             <div id="thumbnailWrapper" class="d-flex" style="transition: transform 0.3s; gap: 4px;">
@@ -43,7 +43,7 @@
                                     <img src="{{ asset('storage/' . $img->image) }}"
                                          data-full="{{ asset('storage/' . $img->image) }}"
                                          class="thumbnail-img rounded border"
-                                         style="width:150px; height:150px; object-fit:cover; cursor:pointer;">
+                                         style="width:137px; height:137px; object-fit:cover; cursor:pointer;">
                                 @endforeach
                             </div>
                         </div>
@@ -90,12 +90,12 @@
                 {{-- Form thêm vào giỏ hàng --}}
                 <form id="add-to-cart-form" action="{{ route('cart.add', $product->id) }}" method="POST" class="d-flex align-items-center mb-4">
                     @csrf
-                    <div class="input-group" style="width:132px;">
-                        <button type="button" class="btn btn-outline-secondary quantity-btn" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">−</button>
-                        <input type="number" name="quantity" value="1" min="1" class="form-control quantity-input">
-                        <button type="button" class="btn btn-outline-secondary quantity-btn" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</button>
+                    <div class="input-group" style="width:125px;">
+                        <button style="border-radius: 0" type="button" class="btn btn-outline-secondary quantity-btn" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">−</button>
+                        <input style="border: none" type="number" name="quantity" value="1" min="1" class="form-control quantity-input">
+                        <button style="border-radius: 0" type="button" class="btn btn-outline-secondary quantity-btn" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</button>
                     </div>
-                    <button type="submit" class="btn btn-danger ms-2 btn-add-to-cart">Thêm vào giỏ hàng</button>
+                    <button type="submit" class="btn btn-danger ms-2 btn-add-to-cart p-3 ms-5">Thêm vào giỏ hàng</button>
                 </form>
 
                 <p class="text-muted mb-2"><strong>tags:</strong> {{ $product->slug }}</p>
@@ -120,21 +120,6 @@
 .product-description table, .product-description th, .product-description td { border:1px solid #ddd; padding:8px; text-align:left; }
 .product-description blockquote { border-left:4px solid #ccc; padding-left:10px; color:#555; margin-bottom:1rem; }
 .sticky-image-container { position:sticky; top:20px; z-index:10; }
-/* .product-description {
-    position: relative;
-    padding-bottom: 56.25%;
-    height: 0;
-    overflow: hidden;
-}
-
-.product-description iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 0;
-} */
 </style>
 
 {{-- Script --}}

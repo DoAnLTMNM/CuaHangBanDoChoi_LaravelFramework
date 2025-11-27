@@ -67,11 +67,13 @@
 
                                     <div class="d-inline-flex align-items-center">
                                         <div class="input-group input-group-sm" style="width:110px;">
-                                            <button type="button" class="btn btn-outline-secondary btn-minus">−</button>
+                                            <button style="border-radius: 0" type="button"
+                                                class="btn btn-outline-secondary btn-minus">−</button>
                                             <input type="number" class="form-control text-center quantity-input"
                                                 value="{{ $quantity }}" min="1" data-id="{{ $cartId }}"
                                                 data-url="{{ route('cart.update', $cartId) }}">
-                                            <button type="button" class="btn btn-outline-secondary btn-plus">+</button>
+                                            <button style="border-radius: 0" type="button"
+                                                class="btn btn-outline-secondary btn-plus">+</button>
                                         </div>
                                     </div>
                                 </div>
@@ -80,9 +82,10 @@
                                 <div class="ms-3">
                                     <button type="button" class="btn btn-link text-danger p-0 btn-remove"
                                         data-id="{{ $cartId }}" data-url="{{ route('cart.remove', $cartId) }}">
-                                        Xóa
+                                        <i class="bi bi-trash-fill" style="font-size:1.2rem;"></i>
                                     </button>
                                 </div>
+
                             </div>
 
                             <div class="d-flex justify-content-between fw-semibold subtotal mt-1">
