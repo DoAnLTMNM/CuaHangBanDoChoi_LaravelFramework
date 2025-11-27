@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\Auth\LoginController as AdminLoginController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
 use App\Http\Controllers\Admin\BannerController as AdminBannerController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\CheckoutController;
@@ -25,9 +27,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     // Admin dashboard & quản trị
     Route::middleware(['auth', RoleMiddleware::class . ':admin'])->group(function () {
 
-        Route::get('dashboard', function () {
-            return view('admin.dashboard');
-        })->name('dashboard');
+        // Dashboard
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
 
         // CRUD sản phẩm (Admin)
         // Admin CRUD sản phẩm
@@ -52,6 +54,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('banners/{banner}', [AdminBannerController::class, 'destroy'])->name('banners.destroy');
 
         Route::post('products/upload-image', [AdminProductController::class, 'uploadImage'])->name('products.uploadImage');
+
+        // CRUD đơn hàng (Admin)
+        Route::get('orders', [AdminOrderController::class, 'index'])->name('orders.index');
+        Route::get('orders/{id}', [AdminOrderController::class, 'show'])->name('orders.show');
+        Route::put('orders/{id}/update-status', [AdminOrderController::class, 'updateStatus'])->name('orders.updateStatus');
     });
 });
 
@@ -75,13 +82,13 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/checkout/success/{order}', [CheckoutController::class, 'success'])->name('checkout.success');
 
-// VNPay
-Route::get('/checkout/vnpay/{order}', [CheckoutController::class,'vnpayPayment'])->name('vnpay.payment');
-Route::get('/checkout/vnpay-return', [CheckoutController::class,'vnpayReturn'])->name('vnpay.return');
+    // VNPay
+    Route::get('/checkout/vnpay/{order}', [CheckoutController::class, 'vnpayPayment'])->name('vnpay.payment');
+    Route::get('/checkout/vnpay-return', [CheckoutController::class, 'vnpayReturn'])->name('vnpay.return');
 
-// Momo
-Route::get('/checkout/momo/{order}', [CheckoutController::class,'momoPayment'])->name('momo.payment');
-Route::post('/checkout/momo-ipn', [CheckoutController::class,'momoIpn'])->name('momo.ipn');
+    // Momo
+    Route::get('/checkout/momo/{order}', [CheckoutController::class, 'momoPayment'])->name('momo.payment');
+    Route::post('/checkout/momo-ipn', [CheckoutController::class, 'momoIpn'])->name('momo.ipn');
 
     Route::get('/orders', [App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [App\Http\Controllers\OrderController::class, 'show'])->name('orders.show');

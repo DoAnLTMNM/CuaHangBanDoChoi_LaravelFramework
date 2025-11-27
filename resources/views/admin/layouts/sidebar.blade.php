@@ -27,5 +27,15 @@
                 <li><a href="{{ route('admin.banners.index') }}">Danh sách Banner</a></li>
             </ul>
         </li>
+                <!-- QUẢN LÝ ĐƠN HÀNG -->
+        <li class="menu-item has-submenu">
+            <a href="javascript:void(0)" class="submenu-toggle">
+                <span>🧾 Quản lý đơn hàng</span>
+                <span class="arrow">▾</span>
+            </a>
+            <ul class="submenu">
+                <li><a href="{{ route('admin.orders.index') }}">Danh sách đơn hàng</a></li>
+            </ul>
+        </li>
     </ul>
 </div>
