@@ -12,18 +12,18 @@
             <ul class="navbar-nav flex-row w-100">
                 @foreach ($categories->take(9) as $category)
                     <li class="nav-item dropdown me-3 text-center cat-item">
-                        <a class="nav-link d-flex flex-column align-items-center"
+                        <a class="nav-link d-flex flex-column align-items-center" style="font-size: 0.9rem"
                             href="{{ url('/category/' . $category->slug) }}">
                             @if ($category->image)
                                 <img src="{{ asset('storage/' . $category->image) }}" alt="{{ $category->name }}"
                                     class="rounded"
-                                    style="width:40px; height:40px; object-fit:cover; margin-bottom:5px;">
+                                    style="width:30px; height:30px; object-fit:cover; margin-bottom:5px;">
                             @endif
                             {{ $category->name }}
                         </a>
 
                         @if ($category->children->count())
-                            <button class="cat-toggle-btn" data-bs-toggle="dropdown" aria-expanded="false">▾</button>
+                            <button class="cat-toggle-btn" data-bs-toggle="dropdown" aria-expanded="false"></button>
                             <ul class="dropdown-menu">
                                 @foreach ($category->children as $child)
                                     <li><a class="dropdown-item"
