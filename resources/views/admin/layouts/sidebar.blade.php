@@ -53,7 +53,6 @@
 /* Sidebar chung */
 .sidebar {
     width: 220px;
-    background-color: #1e1e2f;
     min-height: 100vh;
     color: #fff;
     padding: 1rem 0;

@@ -41,7 +41,7 @@
                style="display:block; margin-bottom: 1rem;">
 
                 <div class="card d-flex flex-row align-items-center card-sales"
-                     style="cursor:pointer; border-radius:10px; padding:8px;">
+                     style="cursor:pointer; border-radius:10px; border:none; padding:0;">
 
                     <img src="{{ $firstImage }}"
                          class="me-2 rounded"
@@ -50,7 +50,7 @@
                     <div class="flex-grow-1">
 
                         <h6 class="mb-1"
-                            style="font-size:0.9rem; font-weight:600; height:2.2em; overflow:hidden; text-transform:uppercase;">
+                            style="font-size:0.8rem; font-weight:600; height:2.2em; overflow:hidden; text-transform:uppercase;">
                             {{ $product->name }}
                         </h6>
 

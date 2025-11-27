@@ -61,7 +61,7 @@ ul {
 
 .banner-img {
     object-fit: cover;
-    height: 400px; /* hoặc auto nếu muốn theo tỉ lệ */
+    height: 250px; /* hoặc auto nếu muốn theo tỉ lệ */
     border-radius: 15px;
 }
 
@@ -101,7 +101,7 @@ ul {
 
 .card-body {
     padding: 10px;
-    text-align: center;
+    /* text-align: center; */
 }
 
 .card-title {

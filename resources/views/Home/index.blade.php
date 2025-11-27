@@ -24,7 +24,7 @@
 
 {{-- Sản phẩm mới nhất --}}
 <div class="sidebar-latest-products mb-3">
-    <h5 class="mb-2">Sản phẩm mới nhất</h5>
+    <h5 class="mb-5" style="color: rgb(78, 17, 17)">HÀNG MỚI</h5>
 
     @php
         $latestProducts = \App\Models\Product::with(['images', 'discount'])
@@ -33,7 +33,7 @@
             ->get();
     @endphp
 
-    <div class="d-flex gap-2 flex-wrap">
+    <div class="d-flex gap-3 flex-wrap">
         @foreach ($latestProducts as $product)
             @php
                 $discountedPrice = $product->price;
@@ -50,8 +50,8 @@
             @endphp
 
             <a href="{{ route('products.show', $product->id) }}" 
-               class="text-decoration-none text-dark" style="width:24%; margin-bottom: 1rem;">
-                <div class="card h-100" style="text-align: left; cursor: pointer;">
+               class="text-decoration-none text-dark" style="width:23%; box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; border-radius:15px;">
+                <div class="card h-100" style="text-align: left; cursor: pointer; border: none; border-radius:15px;">
                     <div class="position-relative">
                         <img src="{{ $firstImage }}" 
                             class="card-img-top product-hover-image"
@@ -61,7 +61,7 @@
                     </div>
                     <div class="card-body p-2">
                         <h6 class="card-title mb-1 product-name" 
-                            style="font-size: 1rem; height: 2.2em; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;">
+                            style="font-size: 0.85rem; height: 2em; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;">
                             {{ $product->name }}
                         </h6>
                         <div>
