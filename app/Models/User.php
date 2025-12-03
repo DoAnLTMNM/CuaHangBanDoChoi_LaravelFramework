@@ -58,9 +58,4 @@ class User extends Authenticatable
         return $this->roles->contains('name', $roleName);
     }
 
-    // Quan hệ với Employee (nếu bạn tạo bảng employees)
-    public function employee()
-    {
-        return $this->hasOne(Employee::class);
-    }
 }

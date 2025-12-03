@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\App;
 
 class LoginRequest extends FormRequest
 {
@@ -39,6 +40,7 @@ class LoginRequest extends FormRequest
      */
     public function authenticate(): void
     {
+        App::setLocale('vi');
         $this->ensureIsNotRateLimited();
 
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {

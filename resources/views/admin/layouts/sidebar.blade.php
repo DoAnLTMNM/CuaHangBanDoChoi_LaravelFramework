@@ -1,6 +1,5 @@
 <div class="sidebar" id="sidebar">
     <div class="sidebar-header d-flex justify-content-between align-items-center px-3 mb-3">
-        <h4 class="text-white m-0">Admin</h4>
         <button class="btn btn-sm btn-light d-md-none" id="sidebarCollapse">
             <i class="bi bi-list"></i>
         </button>

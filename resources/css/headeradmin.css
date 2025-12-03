@@ -67,3 +67,57 @@
 #userDropdown.show {
     display: block;
 }
+
+/* Ẩn menu ngang khi nhỏ hơn 1100px */
+@media (max-width: 1100px) {
+    .navbar-nav.flex-row {
+        display: none !important;
+    }
+
+    .navbar-toggler {
+        display: block !important;
+        margin-left: auto;
+    }
+
+    /* Popup mobile full màn hình bên trái */
+    .mobile-menu {
+        position: fixed;
+        top: 0;
+        left: -100%; /* Ẩn hoàn toàn bên trái */
+        width: 80%; /* Menu chiếm 80% màn hình */
+        height: 100vh;
+        background: #fff;
+        z-index: 2000;
+        padding-top: 20px;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+        transition: left 0.3s ease;
+    }
+
+    .mobile-menu.show {
+        left: 0; /* Trượt vào */
+    }
+
+    .mobile-menu li {
+        list-style: none;
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .mobile-menu li a {
+        text-decoration: none;
+        font-size: 1.1rem;
+        color: #333;
+        display: block;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1101px) {
+    .navbar-toggler {
+        display: none !important;
+    }
+
+    .mobile-menu {
+        display: none !important;
+    }
+}

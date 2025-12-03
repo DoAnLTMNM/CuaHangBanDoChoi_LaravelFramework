@@ -6,7 +6,6 @@
                 <img src="{{ asset('storage/logo-website-123.png') }}" alt="GAME HOBBY Logo" class="logo-img">
             </a>
         </div>
-
         <!-- Nav + Categories -->
         <nav class="main-nav col-md-9 d-flex">
             <ul class="navbar-nav flex-row w-100">
@@ -39,7 +38,8 @@
                 <!-- Cart icon with badge -->
                 <a class="nav-link position-relative" href="{{ route('cart.index') }}">
                     <i class="bi bi-cart3 fs-5"></i>
-                    <span id="cart-count" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    <span id="cart-count"
+                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                         {{ Auth::check() ? \App\Models\Cart::where('user_id', Auth::id())->sum('quantity') : (session('cart') ? array_sum(array_map(fn($i) => $i['quantity'], session('cart'))) : 0) }}
                         <span class="visually-hidden">sản phẩm trong giỏ hàng</span>
                     </span>
@@ -109,9 +109,9 @@
 
     <script>
         // ----- Helper cập nhật cart badge -----
-        function updateCartBadge(count){
+        function updateCartBadge(count) {
             const cartBadge = document.getElementById('cart-count');
-            if(cartBadge) cartBadge.textContent = count;
+            if (cartBadge) cartBadge.textContent = count;
         }
 
         // Dropdown category
@@ -179,7 +179,8 @@
                         const img = product.image ?? '/images/default.png';
                         let discountedPrice = null;
                         if (product.has_discount && product.discount_percentage) {
-                            discountedPrice = product.price - (product.price * product.discount_percentage / 100);
+                            discountedPrice = product.price - (product.price * product
+                                .discount_percentage / 100);
                         }
                         searchResults.innerHTML += `
                             <a href="/products/${product.id}">
@@ -190,16 +191,16 @@
                                         <div>
                                             ${discountedPrice 
                                                 ? `<div class="d-flex gap-2 align-items-center">
-                                                        <span class="text-muted" style="text-decoration: line-through; font-size:0.9rem;">
-                                                            ${Number(product.price).toLocaleString('vi-VN')}₫
-                                                        </span>
-                                                        <span class="text-danger fw-bold" style="font-size:1rem;">
-                                                            ${Number(discountedPrice).toLocaleString('vi-VN')}₫
-                                                        </span>
-                                                   </div>` 
+                                                                        <span class="text-muted" style="text-decoration: line-through; font-size:0.9rem;">
+                                                                            ${Number(product.price).toLocaleString('vi-VN')}₫
+                                                                        </span>
+                                                                        <span class="text-danger fw-bold" style="font-size:1rem;">
+                                                                            ${Number(discountedPrice).toLocaleString('vi-VN')}₫
+                                                                        </span>
+                                                                   </div>` 
                                                 : `<span class="fw-bold" style="font-size:1rem; color:#00b751;">
-                                                        ${Number(product.price).toLocaleString('vi-VN')}₫
-                                                   </span>`
+                                                                        ${Number(product.price).toLocaleString('vi-VN')}₫
+                                                                   </span>`
                                             }
                                         </div>
                                     </div>
@@ -210,4 +211,7 @@
                 });
         });
     </script>
+
+
+
 </header>
