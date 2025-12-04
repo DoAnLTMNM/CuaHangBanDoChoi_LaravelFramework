@@ -42,7 +42,7 @@ class OrderController extends Controller
     // Cập nhật trạng thái đơn hàng
     public function updateStatus(Request $request, $id)
     {
-        $order = Order::findOrFail($id);
+        $order = Order::with('items.product')->findOrFail($id);
 
         $request->validate([
             'status' => 'required|in:pending,processing,completed,cancelled',
@@ -50,6 +50,17 @@ class OrderController extends Controller
 
         $order->status = $request->status;
         $order->save();
+
+        // Nếu trạng thái là completed → trừ stock
+        if ($order->status === 'completed') {
+            foreach ($order->items as $item) {
+                $product = $item->product;
+                if ($product) {
+                    $product->stock = max($product->stock - $item->quantity, 0);
+                    $product->save();
+                }
+            }
+        }
 
         return redirect()->back()->with('success', 'Cập nhật trạng thái đơn hàng thành công!');
     }

@@ -36,7 +36,7 @@
                 <th>Số điện thoại</th>
                 <th>Tổng tiền</th>
                 <th>Trạng thái</th>
-                <th>Thanh toán</th>
+                {{-- <th>Thanh toán</th> --}}
                 <th>Ngày tạo</th>
                 <th>Hành động</th>
             </tr>
@@ -49,7 +49,7 @@
                 <td>{{ $order->phone }}</td>
                 <td>{{ number_format($order->total_price,0,',','.') }}₫</td>
                 <td>{{ $order->status_text }}</td>
-                <td>{{ $order->payment_status_text }}</td>
+                {{-- <td>{{ $order->payment_status_text }}</td> --}}
                 <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
                 <td>
                     <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-sm btn-primary">Xem</a>

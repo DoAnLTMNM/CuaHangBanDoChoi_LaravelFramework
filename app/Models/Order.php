@@ -9,8 +9,6 @@ class Order extends Model
 {
     use HasFactory;
 
-    use HasFactory;
-
     protected $fillable = [
         'user_id',
         'fullname',
@@ -20,18 +18,19 @@ class Order extends Model
         'total_price',
         'status',
         'payment_method',
+        'updated_date',
     ];
 
     public function items()
     {
         return $this->hasMany(OrderItem::class);
     }
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
 
-    // Helper: chuyển status sang tiếng Việt
     public function getStatusTextAttribute()
     {
         $map = [
@@ -46,7 +45,6 @@ class Order extends Model
 
     public function getPaymentStatusTextAttribute()
     {
-        // Nếu thanh toán COD và đang pending → đổi text
         if ($this->payment_method === 'cod' && $this->payment_status === 'pending') {
             return 'Chờ xác nhận';
         }
@@ -60,4 +58,13 @@ class Order extends Model
 
         return $map[$this->payment_status] ?? $this->payment_status;
     }
+
+    // Tự động cập nhật updated_date khi update
+    protected static function booted()
+    {
+        static::updating(function ($order) {
+            $order->updated_date = now();
+        });
+    }
 }
+
