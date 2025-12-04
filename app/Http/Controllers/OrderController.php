@@ -28,16 +28,17 @@ class OrderController extends Controller
         return view('orders.show', compact('order'));
     }
 
-    // Xóa đơn hàng (nếu muốn)
+    // Thay vì xóa đơn hàng
     public function destroy(Order $order)
     {
         if ($order->user_id !== Auth::id()) {
-            abort(403, 'Bạn không có quyền xóa đơn hàng này.');
+            abort(403, 'Bạn không có quyền hủy đơn hàng này.');
         }
 
-        $order->items()->delete();
-        $order->delete();
+        // Chỉ cập nhật trạng thái
+        $order->status = 'cancelled';
+        $order->save(); // updated_date cũng sẽ tự động cập nhật nếu bạn đã thêm booted()
 
-        return redirect()->route('orders.index')->with('success', 'Xóa đơn hàng thành công.');
+        return redirect()->route('orders.index')->with('success', 'Đơn hàng đã được hủy.');
     }
 }
