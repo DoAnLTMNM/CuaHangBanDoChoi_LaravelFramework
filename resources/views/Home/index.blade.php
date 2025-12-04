@@ -87,6 +87,79 @@
     </div>
 </div>
 
+{{-- 3 danh mục nổi bật --}}
+{{-- @php
+    $categories = \App\Models\Category::take(3)->get(); // lấy 3 danh mục đầu tiên
+@endphp --}}
+
+@foreach($categories as $category)
+    <div class="category-section mb-5">
+        <h5 class="mb-4" style="color: rgb(78, 17, 17)">{{ $category->name }}</h5>
+
+        @php
+            $categoryProducts = \App\Models\Product::with(['images', 'discount'])
+                ->where('category_id', $category->id)
+                ->orderByDesc('created_at')
+                ->take(8)
+                ->get();
+        @endphp
+
+        <div class="d-flex gap-3 flex-wrap">
+            @foreach ($categoryProducts as $product)
+                @php
+                    $discountedPrice = $product->price;
+                    if ($product->discount && $product->discount->is_active) {
+                        if ($product->discount->discount_percent) {
+                            $discountedPrice = $product->price * (1 - $product->discount->discount_percent / 100);
+                        } elseif ($product->discount->discount_amount) {
+                            $discountedPrice = max($product->price - $product->discount->discount_amount, 0);
+                        }
+                    }
+
+                    $firstImage = $product->images->first() ? asset('storage/' . $product->images->first()->image) : asset('placeholder.png');
+                    $secondImage = $product->images->count() > 1 ? asset('storage/' . $product->images[1]->image) : $firstImage;
+                @endphp
+
+                <a href="{{ route('products.show', $product->id) }}" 
+                   class="text-decoration-none text-dark" 
+                   style="width:23%; box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; border-radius:15px;">
+                    <div class="card h-100" style="text-align: left; cursor: pointer; border: none; border-radius:15px;">
+                        <div class="position-relative">
+                            <img src="{{ $firstImage }}" 
+                                class="card-img-top product-hover-image"
+                                data-hover="{{ $secondImage }}"
+                                style="width: 100%; height: 250px; object-fit: cover; border-radius: 10px;"
+                                alt="{{ $product->name }}">
+                        </div>
+                        <div class="card-body p-2">
+                            <h6 class="card-title mb-1 product-name" 
+                                style="font-size: 0.85rem; height: 2em; overflow: hidden; text-overflow: ellipsis; text-transform: uppercase;">
+                                {{ $product->name }}
+                            </h6>
+                            <div>
+                                @if ($product->discount && $product->discount->is_active)
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <span class="text-muted" style="text-decoration: line-through; font-size:0.9rem;">
+                                            {{ number_format($product->price, 0, '.', ',') }}₫
+                                        </span>
+                                        <span class="text-danger fw-bold" style="font-size:1rem;">
+                                            {{ number_format($discountedPrice, 0, '.', ',') }}₫
+                                        </span>
+                                    </div>
+                                @else
+                                    <span class="fw-bold" style="font-size:1rem; color: #00b751;">
+                                        {{ number_format($product->price, 0, '.', ',') }}₫
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            @endforeach
+        </div>
+    </div>
+@endforeach
+
 {{-- JS hover hình --}}
 <script>
 document.querySelectorAll('.product-hover-image').forEach(img => {
@@ -104,6 +177,4 @@ document.querySelectorAll('.product-hover-image').forEach(img => {
 });
 </script>
 
-
 @endsection
-
