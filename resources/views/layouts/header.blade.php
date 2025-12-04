@@ -60,7 +60,6 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><a class="dropdown-item" href="{{ route('profile.edit') }}">Thông tin tài khoản</a>
                                 </li>
-                                <li><a class="dropdown-item" href="#">Cài đặt</a></li>
                                 <li><a class="dropdown-item" href="{{ route('orders.index') }}">Đơn hàng</a></li>
                                 <li>
                                     <hr class="dropdown-divider">

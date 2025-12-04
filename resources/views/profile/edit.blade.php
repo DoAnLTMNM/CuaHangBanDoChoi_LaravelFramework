@@ -1,29 +1,52 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Profile') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app3')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-profile-information-form')
-                </div>
-            </div>
+@include('components.toast')
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.update-password-form')
-                </div>
-            </div>
+@section('content')
+<div class="container mt-4">
+    <h2>Thông tin cá nhân</h2>
 
-            <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
-                <div class="max-w-xl">
-                    @include('profile.partials.delete-user-form')
-                </div>
-            </div>
+    {{-- Hiển thị Toast khi cập nhật thành công --}}
+    @if (session('success'))
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                let toastEl = document.getElementById('appToast');
+                let toast = new bootstrap.Toast(toastEl);
+
+                document.getElementById('appToastMessage').innerText = "{{ session('success') }}";
+
+                toast.show();
+            });
+        </script>
+    @endif
+
+    <form action="{{ route('profile.update') }}" method="POST" class="mt-3">
+        @csrf
+        @method('PUT')
+
+        <div class="mb-3">
+            <label>Họ tên (được phép sửa)</label>
+            <input type="text" name="name" class="form-control"
+                   value="{{ old('name', $user->name) }}">
+            @error('name') <small class="text-danger">{{ $message }}</small> @enderror
         </div>
-    </div>
-</x-app-layout>
+
+        <div class="mb-3">
+            <label>Email (không được sửa)</label>
+            <input type="email" value="{{ $user->email }}" class="form-control" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label>Giới tính</label>
+            <input type="text" class="form-control" value="{{ $user->gender ?? 'N/A' }}" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label>Ngày tạo tài khoản</label>
+            <input type="text" class="form-control" value="{{ $user->created_at }}" readonly>
+        </div>
+
+        <button class="btn btn-primary mt-3">Cập nhật</button>
+    </form>
+</div>
+@endsection
