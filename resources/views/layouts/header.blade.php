@@ -9,7 +9,7 @@
         <!-- Nav + Categories -->
         <nav class="main-nav col-md-9 d-flex">
             <ul class="navbar-nav flex-row w-100">
-                @foreach ($categories->take(9) as $category)
+                @foreach ($categories->where('is_active', 1)->take(9) as $category)
                     <li class="nav-item dropdown me-3 text-center cat-item">
                         <a class="nav-link d-flex flex-column align-items-center" style="font-size: 0.9rem"
                             href="{{ url('/category/' . $category->slug) }}">
@@ -21,10 +21,14 @@
                             {{ $category->name }}
                         </a>
 
-                        @if ($category->children->count())
+                        @php
+                            $activeChildren = $category->children->where('is_active', 1);
+                        @endphp
+
+                        @if ($activeChildren->count())
                             <button class="cat-toggle-btn" data-bs-toggle="dropdown" aria-expanded="false"></button>
                             <ul class="dropdown-menu">
-                                @foreach ($category->children as $child)
+                                @foreach ($activeChildren as $child)
                                     <li><a class="dropdown-item"
                                             href="{{ url('/category/' . $child->slug) }}">{{ $child->name }}</a></li>
                                 @endforeach
@@ -190,16 +194,16 @@
                                         <div>
                                             ${discountedPrice 
                                                 ? `<div class="d-flex gap-2 align-items-center">
-                                                                        <span class="text-muted" style="text-decoration: line-through; font-size:0.9rem;">
-                                                                            ${Number(product.price).toLocaleString('vi-VN')}₫
-                                                                        </span>
-                                                                        <span class="text-danger fw-bold" style="font-size:1rem;">
-                                                                            ${Number(discountedPrice).toLocaleString('vi-VN')}₫
-                                                                        </span>
-                                                                   </div>` 
+                                                                            <span class="text-muted" style="text-decoration: line-through; font-size:0.9rem;">
+                                                                                ${Number(product.price).toLocaleString('vi-VN')}₫
+                                                                            </span>
+                                                                            <span class="text-danger fw-bold" style="font-size:1rem;">
+                                                                                ${Number(discountedPrice).toLocaleString('vi-VN')}₫
+                                                                            </span>
+                                                                       </div>` 
                                                 : `<span class="fw-bold" style="font-size:1rem; color:#00b751;">
-                                                                        ${Number(product.price).toLocaleString('vi-VN')}₫
-                                                                   </span>`
+                                                                            ${Number(product.price).toLocaleString('vi-VN')}₫
+                                                                       </span>`
                                             }
                                         </div>
                                     </div>
@@ -210,7 +214,4 @@
                 });
         });
     </script>
-
-
-
 </header>
