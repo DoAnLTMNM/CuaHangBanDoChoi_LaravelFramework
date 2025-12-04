@@ -149,14 +149,25 @@
                                         <select name="parent_id" class="form-control mb-2">
                                             <option value="">Chọn danh mục cha</option>
                                             @foreach ($allCategories as $category)
-                                                @if (!$category->parent_id)
-                                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                @if (!$category->parent_id && $category->id != $cate->id)
+                                                    {{-- tránh chọn chính nó --}}
+                                                    <option value="{{ $category->id }}"
+                                                        {{ $cate->parent_id == $category->id ? 'selected' : '' }}>
+                                                        {{ $category->name }}
+                                                    </option>
                                                     @foreach ($category->children as $child)
-                                                        <option value="{{ $child->id }}">— {{ $child->name }}</option>
+                                                        @if ($child->id != $cate->id)
+                                                            {{-- tránh chọn chính nó --}}
+                                                            <option value="{{ $child->id }}"
+                                                                {{ $cate->parent_id == $child->id ? 'selected' : '' }}>
+                                                                — {{ $child->name }}
+                                                            </option>
+                                                        @endif
                                                     @endforeach
                                                 @endif
                                             @endforeach
                                         </select>
+
 
                                         <div class="form-check">
                                             <input class="form-check-input" type="checkbox" name="is_active" value="1"
