@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Product;
 
 class CategoryController extends Controller
 {
@@ -24,16 +25,33 @@ class CategoryController extends Controller
     /**
      * Hiển thị chi tiết một danh mục.
      */
-    public function show($slug)
-    {
-        $category = Category::with('products.images', 'products.discount')
-            ->where('slug', $slug)
-            ->firstOrFail();
+public function show($slug)
+{
+    $category = Category::where('slug', $slug)->firstOrFail();
 
-        $products = $category->products;
+    $query = Product::with(['images', 'discount'])
+        ->where('category_id', $category->id);
 
-        return view('categories.show', compact('category', 'products'));
+    // Lọc theo giá
+    if (request('price') === 'asc') {
+        $query->orderBy('price', 'asc');
+    } elseif (request('price') === 'desc') {
+        $query->orderBy('price', 'desc');
     }
+
+    // Sắp xếp theo chữ cái
+    if (request('sort') === 'a-z') {
+        $query->orderBy('name', 'asc');
+    } elseif (request('sort') === 'z-a') {
+        $query->orderBy('name', 'desc');
+    }
+
+    // Phân trang
+    $products = $query->paginate(16)->appends(request()->query());
+
+    return view('categories.show', compact('category', 'products'));
+}
+
 
     /**
      * Hiển thị form thêm danh mục.
@@ -134,5 +152,31 @@ class CategoryController extends Controller
 
         return redirect()->route('categories.index')
             ->with('success', 'Xóa danh mục thành công!');
+    }
+
+    public function showCategory($id)
+    {
+        $category = Category::findOrFail($id);
+
+        $query = Product::where('category_id', $category->id);
+
+        // lọc theo giá
+        if (request('price') === 'asc') {
+            $query->orderBy('price', 'asc');
+        } elseif (request('price') === 'desc') {
+            $query->orderBy('price', 'desc');
+        }
+
+        // sắp xếp theo chữ cái
+        if (request('sort') === 'a-z') {
+            $query->orderBy('name', 'asc');
+        } elseif (request('sort') === 'z-a') {
+            $query->orderBy('name', 'desc');
+        }
+
+        // phân trang 16 sản phẩm
+        $products = $query->paginate(16)->appends(request()->query());
+
+        return view('category.show', compact('category', 'products'));
     }
 }

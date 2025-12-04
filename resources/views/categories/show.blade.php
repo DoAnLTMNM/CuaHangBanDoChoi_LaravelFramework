@@ -7,38 +7,27 @@
             <h5 class="mb-2">{{ $category->name }}</h5>
 
             <!-- Dropdown lọc sản phẩm -->
-            <div class="d-flex gap-2 flex-wrap">
-                <!-- Lọc theo giá -->
-                <div class="dropdown">
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="priceFilterDropdown"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Lọc theo giá
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="priceFilterDropdown">
-                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['price' => 'asc']) }}">Giá tăng
-                                dần</a></li>
-                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['price' => 'desc']) }}">Giá giảm
-                                dần</a></li>
-                    </ul>
-                </div>
+            <div class="d-flex gap-2 flex-wrap mb-3">
+                <form method="GET" class="d-flex gap-2 flex-wrap">
 
-                <!-- Sắp xếp theo chữ cái -->
-                <div class="dropdown">
-                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="alphabetSortDropdown"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Sắp xếp theo chữ cái
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="alphabetSortDropdown">
-                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'a-z']) }}">A → Z</a>
-                        </li>
-                        <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'z-a']) }}">Z → A</a>
-                        </li>
-                    </ul>
-                </div>
+                    {{-- Lọc theo giá --}}
+                    <select name="price" class="form-select" style="width:200px;" onchange="this.form.submit()">
+                        <option value="">Lọc theo giá</option>
+                        <option value="asc" {{ request('price') == 'asc' ? 'selected' : '' }}>Giá tăng dần</option>
+                        <option value="desc" {{ request('price') == 'desc' ? 'selected' : '' }}>Giá giảm dần</option>
+                    </select>
+
+                    {{-- Sắp xếp theo chữ cái --}}
+                    {{-- <select name="sort" class="form-select" style="width:200px;" onchange="this.form.submit()">
+            <option value="">Sắp xếp A-Z</option>
+            <option value="a-z" {{ request('sort') == 'a-z' ? 'selected' : '' }}>A → Z</option>
+            <option value="z-a" {{ request('sort') == 'z-a' ? 'selected' : '' }}>Z → A</option>
+        </select> --}}
+
+                </form>
             </div>
+
         </div>
-
-
 
         <div class="d-flex flex-wrap gap-3">
             @foreach ($products as $product)
@@ -94,6 +83,10 @@
                 </a>
             @endforeach
         </div>
+        {{-- Pagination --}}
+        <div class="mt-3 w-100 d-flex justify-content-center">
+            {{ $products->appends(request()->query())->links() }}
+        </div>
     </div>
 
     {{-- JS hover hình --}}
@@ -112,6 +105,4 @@
             }
         });
     </script>
-
-    </div>
 @endsection

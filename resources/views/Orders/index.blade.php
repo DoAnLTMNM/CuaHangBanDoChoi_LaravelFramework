@@ -21,7 +21,7 @@
                         <th>Ngày đặt</th>
                         <th>Tổng tiền</th>
                         <th>Trạng thái</th>
-                        <th>Thanh toán</th>
+                        {{-- <th>Thanh toán</th> --}}
                         <th>Hành động</th>
                     </tr>
                 </thead>
@@ -56,11 +56,11 @@
                                 </span>
                             </td>
 
-                            <td>
+                            {{-- <td>
                                 <span class="badge {{ $paymentClass }} px-3 py-2">
                                     {{ $order->payment_status_text }}
                                 </span>
-                            </td>
+                            </td> --}}
 
                             <td>
                                 <a href="{{ route('orders.show', $order->id) }}" class="btn btn-sm btn-info me-1">
