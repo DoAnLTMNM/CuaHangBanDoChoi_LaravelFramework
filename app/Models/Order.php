@@ -9,7 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
-use HasFactory;
+    use HasFactory;
 
     protected $fillable = [
         'user_id',
@@ -31,7 +31,7 @@ use HasFactory;
         return $this->belongsTo(User::class);
     }
 
-        // Helper: chuyển status sang tiếng Việt
+    // Helper: chuyển status sang tiếng Việt
     public function getStatusTextAttribute()
     {
         $map = [
@@ -46,6 +46,11 @@ use HasFactory;
 
     public function getPaymentStatusTextAttribute()
     {
+        // Nếu thanh toán COD và đang pending → đổi text
+        if ($this->payment_method === 'cod' && $this->payment_status === 'pending') {
+            return 'Chờ xác nhận';
+        }
+
         $map = [
             'pending' => 'Chờ thanh toán',
             'unpaid' => 'Chưa thanh toán',
